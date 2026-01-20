@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="about-page">
+  <h1>About FlashLearn</h1>
+  <p>FlashLearn is a beginner-friendly, professional flashcard and quiz platform built with Flask, HTML, CSS, and minimal JavaScript. It helps learners practice efficiently with interactive flashcards and quizzes.</p>
+
+  <h2>Future Roadmap</h2>
+  <ul>
+    <li>User login and profiles</li>
+    <li>Admin dashboard for flashcards and quizzes</li>
+    <li>Database integration for persistent storage</li>
+    <li>Progress tracking and analytics</li>
+    <li>Category-based quizzes and flashcards</li>
+    <li>Mobile-friendly enhancements</li>
+  </ul>
+</div>
+
+<style>
+.about-page {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #f9fafb;
+}
+
+.about-page h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.about-page h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.about-page p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.about-page ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.about-page ul li {
+  margin-bottom: 0.5rem;
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,162 @@
+:root {
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --text: #222;
+    --accent: #4f46e5;
+}
+
+[data-theme="dark"] {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #f8fafc;
+}
+
+* {
+    font-family: system-ui, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.navbar {
+    padding: 15px 30px;
+    background: var(--card);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    margin-right: 15px;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.container {
+    padding: 30px;
+}
+
+.card {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.center {
+    text-align: center;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: var(--accent);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.flashcard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+    gap: 20px;
+}
+
+.flashcard {
+    perspective: 1000px;
+}
+
+.flashcard .inner {
+    position: relative;
+    height: 150px;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+.flashcard:hover .inner {
+    transform: rotateY(180deg);
+}
+
+.front, .back {
+    position: absolute;
+    backface-visibility: hidden;
+    background: var(--card);
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+    height: 100%;
+}
+
+.back {
+    transform: rotateY(180deg);
+}
+.quiz-card {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.question {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.option {
+    display: block;
+    margin: 8px 0;
+    cursor: pointer;
+}
+
+.option input {
+    margin-right: 8px;
+}
+
+#progress {
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.hidden {
+    display: none;
+}
+
+.result-good {
+    border-left: 6px solid #22c55e;
+}
+
+.result-average {
+    border-left: 6px solid #eab308;
+}
+
+.result-poor {
+    border-left: 6px solid #ef4444;
+}
+.correct {
+    background: #22c55e20;
+    border-left: 5px solid #22c55e;
+}
+
+.wrong {
+    background: #ef444420;
+    border-left: 5px solid #ef4444;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.85;
+}
+.explanation {
+    margin-top: 10px;
+    font-style: italic;
+    color: var(--text);
+}
+#timer {
+    font-weight: 600;
+    margin-bottom: 20px;
+}

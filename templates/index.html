@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-container">
+
+  <div class="hero-card">
+    <h1>Welcome to FlashLearn</h1>
+    <p>Your personal flashcard and quiz platform for effective learning</p>
+    <a href="/flashcards" class="btn-start">Start Learning</a>
+  </div>
+
+  <div class="stats-cards">
+    <div class="stat-card">
+      <h3>Total Flashcards</h3>
+      <p>{{ count }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Quizzes Available</h3>
+      <p>5</p>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    padding: 2rem;
+}
+
+.hero-card {
+    background-color: #1f2937;
+    color: #f9fafb;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.hero-card h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-card p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #d1d5db;
+}
+
+.btn-start {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #4f46e5;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn-start:hover {
+    background-color: #4338ca;
+}
+
+.stats-cards {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.stat-card {
+    background-color: #111827;
+    color: #f9fafb;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    min-width: 150px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.stat-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #9ca3af;
+}
+
+.stat-card p {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+}
+</style>
+
+{% endblock %}

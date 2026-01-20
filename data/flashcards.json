@@ -1,0 +1,17 @@
+[
+  {
+    "question": "What is Python?",
+    "answer": "A high-level programming language",
+    "explanation": "Python is an interpreted, high-level, general-purpose programming language known for its readability and versatility."
+  },
+  {
+    "question": "What is Flask?",
+    "answer": "A lightweight Python web framework",
+    "explanation": "Flask is a micro web framework written in Python that allows for easy and quick web application development."
+  },
+  {
+    "question": "What is HTML?",
+    "answer": "Markup language for web pages",
+    "explanation": "HTML (HyperText Markup Language) is the standard markup language used to create and design web pages."
+  }
+]
