@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "category": "Python",
+    "question": "Which keyword is used to define a function in Python?",
+    "options": ["func", "define", "def", "function"],
+    "answer": "def"
+  },
+  {
+    "id": 2,
+    "category": "Python",
+    "question": "What is the output of print(2 ** 3)?",
+    "options": ["6", "8", "9", "5"],
+    "answer": "8"
+  },
+  {
+    "id": 3,
+    "category": "Web",
+    "question": "Which HTML tag is used for linking JavaScript?",
+    "options": ["<js>", "<script>", "<javascript>", "<link>"],
+    "answer": "<script>"
+  },
+  {
+    "id": 4,
+    "category": "Web",
+    "question": "CSS stands for?",
+    "options": [
+      "Creative Style Sheets",
+      "Cascading Style Sheets",
+      "Computer Style Sheets",
+      "Colorful Style Sheets"
+    ],
+    "answer": "Cascading Style Sheets"
+  }
+]

@@ -1,7 +1,11 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, request
 import json
+import random
 
 app = Flask(__name__)
+
+with open("data/questions.json", "r") as f:
+    questions = json.load(f)
 
 def load_data(path):
     with open(path, "r") as f:
@@ -22,14 +26,20 @@ def flashcards():
     data = load_data("data/flashcards.json")
     return render_template("flashcards.html", flashcards=data)
 
-@app.route("/quiz")
-def quiz():
-    questions = load_data("data/quiz.json")
-    return render_template("quiz.html", questions=questions)
+@app.route("/quiz/<category>")
+def quiz(category):
+    count = int(request.args.get("count", 5))
+    filtered = [q for q in questions if q["category"] == category]
+    random.shuffle(filtered)
+    selected_questions = filtered[:count]
+    return render_template(
+        "quiz.html",
+        questions=selected_questions,
+        category=category
+    )
 
 @app.route("/about")
 def about():
     return render_template("about.html")
-
 if __name__ == "__main__":
     app.run(debug=True)
