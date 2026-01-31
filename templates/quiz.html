@@ -41,6 +41,9 @@ const submitBtn = document.getElementById('submit-btn');
 const timerEl = document.getElementById('timer');
 const resultEl = document.getElementById('result');
 
+// Category passed from Flask
+const category = "{{ category|default('General') }}";
+
 // Hide submit initially
 submitBtn.classList.add('hidden');
 
@@ -66,7 +69,7 @@ function startTimer() {
 
 startTimer();
 
-quizCards.forEach((card, idx) => {
+quizCards.forEach(card => {
   const options = card.querySelectorAll('input');
   options.forEach(opt => {
     opt.addEventListener('change', () => {
@@ -95,14 +98,34 @@ function nextQuestion(selected, correct) {
 function submitQuiz() {
   if (!completed) return;
 
+  // ---- Progress Tracking ----
+  const progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
+
+  if (!progress[category]) {
+    progress[category] = { attempts: 0, best: 0, last: 0 };
+  }
+
+  progress[category].attempts += 1;
+  progress[category].last = score;
+  progress[category].best = Math.max(progress[category].best, score);
+
+  localStorage.setItem("quizProgress", JSON.stringify(progress));
+  // ---------------------------
+
   resultEl.classList.remove('hidden');
-  resultEl.innerText = `Final Score: ${score} / ${total}`;
+  resultEl.innerHTML = `
+    <strong>Final Score:</strong> ${score} / ${total}<br><br>
+    <strong>Attempts:</strong> ${progress[category].attempts}<br>
+    <strong>Best Score:</strong> ${progress[category].best} / ${total}<br>
+    <strong>Last Score:</strong> ${progress[category].last} / ${total}
+  `;
+
   submitBtn.classList.add('hidden');
   document.getElementById('next-quiz-btn').classList.remove('hidden');
 }
 
 function nextQuiz() {
-  window.location.href = "/quiz";
+  window.location.href = "/categories";
 }
 </script>
   </div>
