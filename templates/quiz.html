@@ -80,19 +80,45 @@ quizCards.forEach(card => {
 });
 
 function nextQuestion(selected, correct) {
-  if (selected && selected === correct) score++;
+  const currentCard = quizCards[currentIndex];
 
-  quizCards[currentIndex].style.display = 'none';
-  currentIndex++;
+  if (selected) {
+    const options = currentCard.querySelectorAll('label.option');
 
-  if (currentIndex < total) {
-    quizCards[currentIndex].style.display = 'block';
-    startTimer();
-  } else {
-    completed = true;
-    timerEl.style.display = 'none';
-    submitBtn.classList.remove('hidden');
+    options.forEach(opt => {
+      opt.classList.add('disabled');
+      const input = opt.querySelector('input');
+
+      if (input.value === correct) {
+        opt.classList.add('correct');
+      }
+
+      if (input.value === selected && selected !== correct) {
+        opt.classList.add('wrong');
+      }
+
+      input.disabled = true;
+    });
+
+    if (selected === correct) score++;
+
+    const explanation = currentCard.querySelector('.explanation');
+    explanation.classList.remove('hidden');
   }
+
+  setTimeout(() => {
+    currentCard.style.display = 'none';
+    currentIndex++;
+
+    if (currentIndex < total) {
+      quizCards[currentIndex].style.display = 'block';
+      startTimer();
+    } else {
+      completed = true;
+      timerEl.style.display = 'none';
+      submitBtn.classList.remove('hidden');
+    }
+  }, 800);
 }
 
 function submitQuiz() {
@@ -114,10 +140,11 @@ function submitQuiz() {
 
   resultEl.classList.remove('hidden');
   resultEl.innerHTML = `
-    <strong>Final Score:</strong> ${score} / ${total}<br><br>
-    <strong>Attempts:</strong> ${progress[category].attempts}<br>
-    <strong>Best Score:</strong> ${progress[category].best} / ${total}<br>
-    <strong>Last Score:</strong> ${progress[category].last} / ${total}
+    <h3>Quiz Result</h3>
+    <p><strong>Score:</strong> ${score} / ${total}</p>
+    <p><strong>Accuracy:</strong> ${Math.round((score/total)*100)}%</p>
+    <p><strong>Attempts:</strong> ${progress[category].attempts}</p>
+    <p><strong>Best Score:</strong> ${progress[category].best} / ${total}</p>
   `;
 
   submitBtn.classList.add('hidden');
