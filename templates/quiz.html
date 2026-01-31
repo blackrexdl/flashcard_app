@@ -34,6 +34,7 @@ let score = 0;
 let timeLeft = 15;
 let timer;
 let completed = false;
+let incorrectCards = [];
 
 const quizCards = document.querySelectorAll('.quiz-card');
 const total = quizCards.length;
@@ -100,7 +101,11 @@ function nextQuestion(selected, correct) {
       input.disabled = true;
     });
 
-    if (selected === correct) score++;
+    if (selected === correct) {
+      score++;
+    } else {
+      incorrectCards.push(currentCard.cloneNode(true));
+    }
 
     const explanation = currentCard.querySelector('.explanation');
     explanation.classList.remove('hidden');
@@ -149,10 +154,49 @@ function submitQuiz() {
 
   submitBtn.classList.add('hidden');
   document.getElementById('next-quiz-btn').classList.remove('hidden');
+  document.getElementById('retry-btn').classList.remove('hidden');
 }
 
 function nextQuiz() {
   window.location.href = "/categories";
+}
+
+function retryIncorrect() {
+  if (incorrectCards.length === 0) {
+    alert("No incorrect questions to retry 🎉");
+    return;
+  }
+
+  quizCards.forEach(card => card.style.display = 'none');
+
+  const container = document.getElementById('quiz-container');
+
+  incorrectCards.forEach(card => {
+    card.querySelectorAll('input').forEach(i => {
+      i.checked = false;
+      i.disabled = false;
+    });
+
+    card.querySelectorAll('.option').forEach(opt => {
+      opt.classList.remove('correct', 'wrong', 'disabled');
+    });
+
+    card.querySelector('.explanation').classList.add('hidden');
+    container.insertBefore(card, document.getElementById('submit-btn'));
+  });
+
+  incorrectCards = [];
+  currentIndex = 0;
+  score = 0;
+  completed = false;
+
+  submitBtn.classList.add('hidden');
+  document.getElementById('retry-btn').classList.add('hidden');
+  resultEl.classList.add('hidden');
+  timerEl.style.display = 'block';
+
+  quizCards = document.querySelectorAll('.quiz-card');
+  startTimer();
 }
 </script>
   </div>

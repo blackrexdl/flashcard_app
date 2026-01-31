@@ -11,6 +11,13 @@
       <button class="length-btn" data-count="10">10</button>
       <button class="length-btn" data-count="15">15</button>
     </div>
+</div>
+
+  <div class="category-progress">
+    <h2>Your Performance</h2>
+    <div id="progressContainer" class="progress-grid">
+      <p class="muted">No attempts yet. Take a quiz to see stats.</p>
+    </div>
   </div>
 
   <div class="category-grid">
@@ -84,6 +91,44 @@
   background: #6366f1;
   color: white;
 }
+  .category-progress {
+    margin-top: 3rem;
+  }
+
+  .category-progress h2 {
+    color: #f9fafb;
+    margin-bottom: 1.2rem;
+  }
+
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .progress-card {
+    background: #020617;
+    border-radius: 12px;
+    padding: 16px;
+    color: #e5e7eb;
+    text-align: left;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+  }
+
+  .progress-card h4 {
+    margin-bottom: 8px;
+    color: #a5b4fc;
+  }
+
+  .progress-card p {
+    margin: 4px 0;
+    font-size: 0.95rem;
+  }
+
+  .muted {
+    color: #9ca3af;
+    text-align: center;
+  }
 </style>
 <script>
 let selectedCount = 5;
@@ -103,6 +148,27 @@ buttons.forEach(btn => {
     });
   });
 });
+</script>
+<script>
+const progressContainer = document.getElementById("progressContainer");
+const progressData = JSON.parse(localStorage.getItem("quizProgress")) || {};
+
+if (Object.keys(progressData).length > 0) {
+  progressContainer.innerHTML = "";
+
+  Object.keys(progressData).forEach(cat => {
+    const data = progressData[cat];
+    const card = document.createElement("div");
+    card.className = "progress-card";
+    card.innerHTML = `
+      <h4>${cat}</h4>
+      <p>Attempts: ${data.attempts}</p>
+      <p>Best Score: ${data.best}</p>
+      <p>Last Score: ${data.last}</p>
+    `;
+    progressContainer.appendChild(card);
+  });
+}
 </script>
 </instructions>
 
