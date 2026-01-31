@@ -23,10 +23,88 @@
     </div>
     {% endfor %}
 
-    <button class="btn" onclick="submitQuiz()">Submit Quiz</button>
+    <button id="submit-btn" type="button" class="btn" onclick="submitQuiz()">Submit Quiz</button>
+    <button id="next-quiz-btn" type="button" class="btn hidden" onclick="nextQuiz()">New Quiz</button>
     <p id="timer">Time left: <span id="time">60</span>s</p>
     <div id="result" class="card hidden"></div>
-    <button id="retry-btn" class="btn">Retry Incorrect</button>
+    <button id="retry-btn" class="btn hidden" onclick="retryIncorrect()">Retry Incorrect</button>
+    <script>
+let currentIndex = 0;
+let score = 0;
+let timeLeft = 15;
+let timer;
+let completed = false;
+
+const quizCards = document.querySelectorAll('.quiz-card');
+const total = quizCards.length;
+const submitBtn = document.getElementById('submit-btn');
+const timerEl = document.getElementById('timer');
+const resultEl = document.getElementById('result');
+
+// Hide submit initially
+submitBtn.classList.add('hidden');
+
+// Show only first question
+quizCards.forEach((card, index) => {
+  card.style.display = index === 0 ? 'block' : 'none';
+});
+
+function startTimer() {
+  timeLeft = 15;
+  document.getElementById('time').innerText = timeLeft;
+
+  timer = setInterval(() => {
+    timeLeft--;
+    document.getElementById('time').innerText = timeLeft;
+
+    if (timeLeft === 0) {
+      clearInterval(timer);
+      nextQuestion(null);
+    }
+  }, 1000);
+}
+
+startTimer();
+
+quizCards.forEach((card, idx) => {
+  const options = card.querySelectorAll('input');
+  options.forEach(opt => {
+    opt.addEventListener('change', () => {
+      clearInterval(timer);
+      nextQuestion(opt.value, card.dataset.answer);
+    });
+  });
+});
+
+function nextQuestion(selected, correct) {
+  if (selected && selected === correct) score++;
+
+  quizCards[currentIndex].style.display = 'none';
+  currentIndex++;
+
+  if (currentIndex < total) {
+    quizCards[currentIndex].style.display = 'block';
+    startTimer();
+  } else {
+    completed = true;
+    timerEl.style.display = 'none';
+    submitBtn.classList.remove('hidden');
+  }
+}
+
+function submitQuiz() {
+  if (!completed) return;
+
+  resultEl.classList.remove('hidden');
+  resultEl.innerText = `Final Score: ${score} / ${total}`;
+  submitBtn.classList.add('hidden');
+  document.getElementById('next-quiz-btn').classList.remove('hidden');
+}
+
+function nextQuiz() {
+  window.location.href = "/quiz";
+}
+</script>
   </div>
 </div>
 
@@ -144,5 +222,8 @@
     font-size: 0.9rem;
   }
 }
+  .hidden {
+    display: none;
+  }
 </style>
 {% endblock %}
