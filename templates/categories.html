@@ -4,9 +4,18 @@
 <div class="category-page">
   <h1>Select a Category</h1>
 
+    <div class="quiz-settings">
+    <h3>Select Number of Questions</h3>
+    <div class="length-options">
+      <button class="length-btn active" data-count="5">5</button>
+      <button class="length-btn" data-count="10">10</button>
+      <button class="length-btn" data-count="15">15</button>
+    </div>
+  </div>
+
   <div class="category-grid">
     {% for cat in categories %}
-      <a href="/quiz/{{ cat }}" class="category-card">
+      <a href="/quiz/{{ cat }}?count=5" class="category-card" data-category="{{ cat }}">
         {{ cat }}
       </a>
     {% endfor %}
@@ -40,6 +49,61 @@
   background: #374151;
   transform: translateY(-4px);
 }
+.quiz-settings {
+  margin-top: 1.5rem;
+}
+
+.quiz-settings h3 {
+  color: #e5e7eb;
+  margin-bottom: 0.8rem;
+}
+
+.length-options {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.length-btn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #020617;
+  color: #e5e7eb;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.length-btn:hover {
+  background: #1f2937;
+  transform: translateY(-2px);
+}
+
+.length-btn.active {
+  background: #6366f1;
+  color: white;
+}
 </style>
+<script>
+let selectedCount = 5;
+
+const buttons = document.querySelectorAll('.length-btn');
+const categoryLinks = document.querySelectorAll('.category-card');
+
+buttons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedCount = btn.dataset.count;
+
+    categoryLinks.forEach(link => {
+      const cat = link.dataset.category;
+      link.href = `/quiz/${cat}?count=${selectedCount}`;
+    });
+  });
+});
+</script>
+</instructions>
 
 {% endblock %}

@@ -19,7 +19,12 @@
       <p>5</p>
     </div>
   </div>
-
+  <div class="progress-section">
+    <h2>Your Quiz Progress</h2>
+    <div id="progressCards" class="progress-cards">
+      <p class="muted">No quiz attempts yet. Start a quiz to see progress.</p>
+    </div>
+  </div>
 </div>
 
 <style>
@@ -96,6 +101,78 @@
     font-weight: 700;
     color: #fff;
 }
+.progress-section {
+    width: 100%;
+    max-width: 900px;
+    margin-top: 1rem;
+}
+
+.progress-section h2 {
+    text-align: center;
+    color: #f9fafb;
+    margin-bottom: 1rem;
+}
+
+.progress-cards {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.progress-card {
+    background-color: #020617;
+    color: #f9fafb;
+    padding: 1.2rem 1.5rem;
+    border-radius: 12px;
+    min-width: 220px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.progress-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+.progress-card h3 {
+    margin-bottom: 0.6rem;
+    font-size: 1.1rem;
+    color: #a5b4fc;
+}
+
+.progress-card p {
+    font-size: 0.95rem;
+    margin: 0.2rem 0;
+    color: #e5e7eb;
+}
+
+.muted {
+    color: #9ca3af;
+    text-align: center;
+}
 </style>
+<script>
+const container = document.getElementById("progressCards");
+const progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
+const categories = Object.keys(progress);
+
+if (categories.length > 0) {
+  container.innerHTML = "";
+  categories.forEach(cat => {
+    const data = progress[cat];
+    const card = document.createElement("div");
+    card.className = "progress-card";
+    card.innerHTML = `
+      <h3>${cat}</h3>
+      <p>Attempts: ${data.attempts}</p>
+      <p>Best Score: ${data.best}</p>
+      <p>Last Score: ${data.last}</p>
+    `;
+    container.appendChild(card);
+  });
+}
+</script>
+</instructions>
 
 {% endblock %}
