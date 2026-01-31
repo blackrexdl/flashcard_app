@@ -1,29 +1,39 @@
 [
   {
+    "id": 1,
+    "category": "Geography",
     "question": "What is the capital of France?",
     "options": ["Paris", "London", "Berlin", "Madrid"],
     "answer": "Paris",
     "explanation": "Paris is the capital and most populous city of France."
   },
   {
+    "id": 2,
+    "category": "Science",
     "question": "Which planet is known as the Red Planet?",
     "options": ["Earth", "Mars", "Jupiter", "Venus"],
     "answer": "Mars",
     "explanation": "Mars is often called the 'Red Planet' because of its reddish appearance."
   },
   {
+    "id": 3,
+    "category": "Geography",
     "question": "What is the largest ocean on Earth?",
     "options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
     "answer": "Pacific Ocean",
     "explanation": "The Pacific Ocean is the largest and deepest of Earth's oceanic divisions."
   },
   {
+    "id": 4,
+    "category": "Literature",
     "question": "Who wrote the play 'Romeo and Juliet'?",
     "options": ["William Shakespeare", "Charles Dickens", "Jane Austen", "Mark Twain"],
     "answer": "William Shakespeare",
     "explanation": "'Romeo and Juliet' is a tragedy written by William Shakespeare."
   },
   {
+    "id": 5,
+    "category": "Science",
     "question": "What is the chemical symbol for Gold?",
     "options": ["Au", "Ag", "Gd", "Go"],
     "answer": "Au",

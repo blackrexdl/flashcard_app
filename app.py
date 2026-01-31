@@ -7,6 +7,11 @@ def load_data(path):
     with open(path, "r") as f:
         return json.load(f)
 
+@app.route("/categories")
+def categories():
+    categories = sorted(set(q["category"] for q in questions))
+    return render_template("categories.html", categories=categories)
+
 @app.route("/")
 def index():
     flashcards = load_data("data/flashcards.json")
