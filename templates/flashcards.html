@@ -3,9 +3,18 @@
 
 <div class="flashcard-page">
   <h1 class="page-title">Your Flashcards</h1>
+  <div class="flashcard-filter">
+    <label for="categorySelect">Select Category:</label>
+    <select id="categorySelect">
+      <option value="all">All</option>
+      {% for cat in categories %}
+        <option value="{{ cat }}">{{ cat }}</option>
+      {% endfor %}
+    </select>
+  </div>
   <div class="flashcard-container">
     {% for card in flashcards %}
-    <div class="flashcard">
+    <div class="flashcard" data-category="{{ card.category }}">
       <div class="flashcard-inner">
         <div class="flashcard-front">{{ card.question }}</div>
         <div class="flashcard-back">{{ card.answer }}</div>
@@ -21,6 +30,21 @@
 </div>
 
 <style>
+.flashcard-filter {
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: #e5e7eb;
+}
+
+.flashcard-filter select {
+  background: #020617;
+  color: #e5e7eb;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
 .flashcard-page {
   padding: 2rem;
   display: flex;
@@ -92,5 +116,20 @@
   }
 }
 </style>
+
+<script>
+const select = document.getElementById("categorySelect");
+const cards = document.querySelectorAll(".flashcard");
+
+select.addEventListener("change", () => {
+  const value = select.value;
+  cards.forEach(card => {
+    card.style.display =
+      value === "all" || card.dataset.category === value
+        ? "block"
+        : "none";
+  });
+});
+</script>
 
 {% endblock %}
