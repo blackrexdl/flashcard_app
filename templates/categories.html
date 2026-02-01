@@ -166,6 +166,40 @@
   color: #9ca3af;
   margin-bottom: 6px;
 }
+.best-category {
+  border: 2px solid #22c55e;
+  position: relative;
+}
+
+.best-category::after {
+  content: "🏆 Best";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #22c55e;
+  color: #020617;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.recommended-category {
+  border: 2px dashed #f59e0b;
+  position: relative;
+}
+
+.recommended-category::after {
+  content: "🧠 Practice Next";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  background: #f59e0b;
+  color: #020617;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+}
 </style>
 <script>
 let selectedCount = 5;
@@ -190,6 +224,16 @@ buttons.forEach(btn => {
 const progressContainer = document.getElementById("progressContainer");
 const progressData = JSON.parse(localStorage.getItem("quizProgress")) || {};
 
+const bestCategory = Object.keys(progressData).reduce((best, cat) => {
+  if (!best) return cat;
+  return progressData[cat].best > progressData[best].best ? cat : best;
+}, null);
+
+const recommendedCategory = Object.keys(progressData).reduce((worst, cat) => {
+  if (!worst) return cat;
+  return progressData[cat].best < progressData[worst].best ? cat : worst;
+}, null);
+
 if (Object.keys(progressData).length > 0) {
   progressContainer.innerHTML = "";
 
@@ -197,6 +241,12 @@ if (Object.keys(progressData).length > 0) {
     const data = progressData[cat];
     const card = document.createElement("div");
     card.className = "progress-card";
+    if (cat === bestCategory) {
+      card.classList.add("best-category");
+    }
+    if (cat === recommendedCategory && cat !== bestCategory) {
+      card.classList.add("recommended-category");
+    }
     const percent = data.attempts > 0 ? Math.round((data.best / 15) * 100) : 0;
 
     card.innerHTML = `
