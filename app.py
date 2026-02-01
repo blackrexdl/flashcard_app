@@ -29,13 +29,24 @@ def flashcards():
 @app.route("/quiz/<category>")
 def quiz(category):
     count = int(request.args.get("count", 5))
-    filtered = [q for q in questions if q["category"] == category]
+
+    # filter questions by category
+    filtered = [q for q in questions if q.get("category") == category]
+
+    # shuffle for randomness
     random.shuffle(filtered)
-    selected_questions = filtered[:count]
+
+    # if requested count is more than available, use all
+    if len(filtered) < count:
+        selected_questions = filtered
+    else:
+        selected_questions = filtered[:count]
+
     return render_template(
         "quiz.html",
         questions=selected_questions,
-        category=category
+        category=category,
+        total=len(selected_questions)
     )
 
 @app.route("/about")
