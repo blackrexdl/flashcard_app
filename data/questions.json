@@ -173,4 +173,144 @@
     "options": ["Float", "Table", "Flexbox", "Inline"],
     "answer": "Flexbox"
   }
+,
+  {
+    "id": 25,
+    "category": "Java",
+    "question": "Which method is the entry point of a Java program?",
+    "options": ["start()", "main()", "run()", "init()"],
+    "answer": "main()"
+  },
+  {
+    "id": 26,
+    "category": "Java",
+    "question": "Which keyword is used to create an object in Java?",
+    "options": ["class", "new", "object", "create"],
+    "answer": "new"
+  },
+  {
+    "id": 27,
+    "category": "Java",
+    "question": "Which access modifier makes members visible everywhere?",
+    "options": ["private", "protected", "default", "public"],
+    "answer": "public"
+  },
+  {
+    "id": 28,
+    "category": "Java",
+    "question": "Which of these is NOT a primitive data type?",
+    "options": ["int", "boolean", "String", "double"],
+    "answer": "String"
+  },
+  {
+    "id": 29,
+    "category": "Java",
+    "question": "Which keyword is used to handle exceptions?",
+    "options": ["catch", "throw", "try", "error"],
+    "answer": "try"
+  },
+
+  {
+    "id": 30,
+    "category": "Python",
+    "question": "Which keyword is used to create a class?",
+    "options": ["function", "define", "class", "object"],
+    "answer": "class"
+  },
+  {
+    "id": 31,
+    "category": "Python",
+    "question": "Which loop is used when iterations are known?",
+    "options": ["while", "loop", "for", "repeat"],
+    "answer": "for"
+  },
+  {
+    "id": 32,
+    "category": "Python",
+    "question": "What does break do in a loop?",
+    "options": ["Skips iteration", "Ends loop", "Pauses loop", "Restarts loop"],
+    "answer": "Ends loop"
+  },
+
+  {
+    "id": 33,
+    "category": "Web",
+    "question": "Which tag is used for images in HTML?",
+    "options": ["<image>", "<img>", "<pic>", "<src>"],
+    "answer": "<img>"
+  },
+  {
+    "id": 34,
+    "category": "Web",
+    "question": "Which CSS unit is relative?",
+    "options": ["px", "cm", "em", "mm"],
+    "answer": "em"
+  },
+  {
+    "id": 35,
+    "category": "Web",
+    "question": "Which protocol is used for secure websites?",
+    "options": ["HTTP", "FTP", "HTTPS", "SMTP"],
+    "answer": "HTTPS"
+  },
+
+  {
+    "id": 36,
+    "category": "JavaScript",
+    "question": "Which method converts JSON to object?",
+    "options": ["JSON.parse()", "JSON.stringify()", "JSON.object()", "JSON.convert()"],
+    "answer": "JSON.parse()"
+  },
+  {
+    "id": 37,
+    "category": "JavaScript",
+    "question": "Which keyword defines a constant?",
+    "options": ["var", "let", "const", "static"],
+    "answer": "const"
+  },
+
+  {
+    "id": 38,
+    "category": "C",
+    "question": "Which header file is needed for printf?",
+    "options": ["stdlib.h", "stdio.h", "math.h", "conio.h"],
+    "answer": "stdio.h"
+  },
+  {
+    "id": 39,
+    "category": "C",
+    "question": "Which loop executes at least once?",
+    "options": ["for", "while", "do-while", "if"],
+    "answer": "do-while"
+  },
+
+  {
+    "id": 40,
+    "category": "C++",
+    "question": "Which feature allows same function name?",
+    "options": ["Inheritance", "Encapsulation", "Polymorphism", "Abstraction"],
+    "answer": "Polymorphism"
+  },
+  {
+    "id": 41,
+    "category": "C++",
+    "question": "Which operator is used to access class members?",
+    "options": ["::", ".", "->", ":"],
+    "answer": "."
+  },
+
+  {
+    "id": 42,
+    "category": "SQL",
+    "question": "Which command removes a table?",
+    "options": ["DELETE", "REMOVE", "DROP", "TRUNCATE"],
+    "answer": "DROP"
+  },
+  {
+    "id": 43,
+    "category": "SQL",
+    "question": "Which keyword sorts results?",
+    "options": ["GROUP BY", "ORDER BY", "SORT", "ARRANGE"],
+    "answer": "ORDER BY"
+  }
 ]
