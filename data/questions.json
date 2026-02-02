@@ -102,5 +102,75 @@
     "question": "Which clause is used to filter records?",
     "options": ["ORDER BY", "WHERE", "GROUP BY", "HAVING"],
     "answer": "WHERE"
+  },
+  {
+    "id": 15,
+    "category": "Python",
+    "question": "Which data type is immutable in Python?",
+    "options": ["List", "Set", "Dictionary", "Tuple"],
+    "answer": "Tuple"
+  },
+  {
+    "id": 16,
+    "category": "Python",
+    "question": "What does len() return?",
+    "options": ["Type", "Length", "Index", "Value"],
+    "answer": "Length"
+  },
+  {
+    "id": 17,
+    "category": "Python",
+    "question": "Which keyword is used to handle exceptions?",
+    "options": ["catch", "handle", "try", "error"],
+    "answer": "try"
+  },
+  {
+    "id": 18,
+    "category": "Python",
+    "question": "Which operator is used for floor division?",
+    "options": ["/", "//", "%", "**"],
+    "answer": "//"
+  },
+  {
+    "id": 19,
+    "category": "Python",
+    "question": "What is the output type of input() in Python?",
+    "options": ["int", "float", "string", "boolean"],
+    "answer": "string"
+  },
+  {
+    "id": 20,
+    "category": "Web",
+    "question": "Which HTML tag is used to create a form?",
+    "options": ["<input>", "<form>", "<section>", "<div>"],
+    "answer": "<form>"
+  },
+  {
+    "id": 21,
+    "category": "Web",
+    "question": "Which CSS property controls text size?",
+    "options": ["font-style", "text-size", "font-size", "size"],
+    "answer": "font-size"
+  },
+  {
+    "id": 22,
+    "category": "Web",
+    "question": "Which HTTP method is used to send data?",
+    "options": ["GET", "POST", "FETCH", "SEND"],
+    "answer": "POST"
+  },
+  {
+    "id": 23,
+    "category": "Web",
+    "question": "Which HTML attribute is used for links?",
+    "options": ["src", "href", "link", "ref"],
+    "answer": "href"
+  },
+  {
+    "id": 24,
+    "category": "Web",
+    "question": "Which CSS layout is best for responsive design?",
+    "options": ["Float", "Table", "Flexbox", "Inline"],
+    "answer": "Flexbox"
   }
 ]

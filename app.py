@@ -49,6 +49,32 @@ def quiz(category):
         total=len(selected_questions)
     )
 
+@app.route("/quiz/mixed")
+def mixed_quiz():
+    count = int(request.args.get("count", 5))
+    categories_param = request.args.get("categories", "")
+
+    # split selected categories
+    selected_categories = [c for c in categories_param.split(",") if c]
+
+    # collect questions from all selected categories
+    pooled_questions = [
+        q for q in questions if q.get("category") in selected_categories
+    ]
+
+    # shuffle pooled questions
+    random.shuffle(pooled_questions)
+
+    # limit to requested count
+    selected_questions = pooled_questions[:count]
+
+    return render_template(
+        "quiz.html",
+        questions=selected_questions,
+        category="Mixed",
+        total=len(selected_questions)
+    )
+
 @app.route("/about")
 def about():
     return render_template("about.html")

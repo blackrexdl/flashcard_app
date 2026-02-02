@@ -20,13 +20,20 @@
     </div>
   </div>
 
+  <form id="quizForm">
   <div class="category-grid">
     {% for cat in categories %}
-      <a href="/quiz/{{ cat }}?count=5" class="category-card" data-category="{{ cat }}">
-        {{ cat }}
-      </a>
+      <label class="category-card checkbox-card">
+        <input type="checkbox" name="categories" value="{{ cat }}">
+        <span>{{ cat }}</span>
+      </label>
     {% endfor %}
   </div>
+
+  <button type="submit" class="start-quiz-btn">
+    Start Mixed Quiz
+  </button>
+</form>
 </div>
 
 <style>
@@ -200,24 +207,60 @@
   border-radius: 999px;
   font-weight: 700;
 }
+.checkbox-card {
+  cursor: pointer;
+}
+
+.checkbox-card input {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+
+.start-quiz-btn {
+  margin-top: 30px;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 999px;
+  background: #22c55e;
+  color: #020617;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.start-quiz-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
 </style>
 <script>
 let selectedCount = 5;
 
-const buttons = document.querySelectorAll('.length-btn');
-const categoryLinks = document.querySelectorAll('.category-card');
-
-buttons.forEach(btn => {
+document.querySelectorAll('.length-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    buttons.forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.length-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     selectedCount = btn.dataset.count;
-
-    categoryLinks.forEach(link => {
-      const cat = link.dataset.category;
-      link.href = `/quiz/${cat}?count=${selectedCount}`;
-    });
   });
+});
+
+document.getElementById("quizForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const selectedCats = [...document.querySelectorAll('input[name="categories"]:checked')]
+    .map(cb => cb.value);
+
+  if (selectedCats.length === 0) {
+    alert("Select at least one category");
+    return;
+  }
+
+  const params = new URLSearchParams();
+  params.append("count", selectedCount);
+  params.append("categories", selectedCats.join(","));
+
+  window.location.href = `/quiz/mixed?${params.toString()}`;
 });
 </script>
 <script>
