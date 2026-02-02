@@ -63,7 +63,7 @@ function startTimer() {
 
     if (timeLeft === 0) {
       clearInterval(timer);
-      nextQuestion(null);
+      nextQuestion(null, quizCards[currentIndex].dataset.answer);
     }
   }, 1000);
 }
@@ -82,8 +82,9 @@ quizCards.forEach(card => {
 
 function nextQuestion(selected, correct) {
   const currentCard = quizCards[currentIndex];
+  if (!currentCard) return;
 
-  if (selected) {
+  if (selected !== null) {
     const options = currentCard.querySelectorAll('label.option');
 
     options.forEach(opt => {
@@ -115,11 +116,12 @@ function nextQuestion(selected, correct) {
     currentCard.style.display = 'none';
     currentIndex++;
 
-    if (currentIndex < total) {
+    if (currentIndex < quizCards.length) {
       quizCards[currentIndex].style.display = 'block';
       startTimer();
     } else {
       completed = true;
+      clearInterval(timer);
       timerEl.style.display = 'none';
       submitBtn.classList.remove('hidden');
     }

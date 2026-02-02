@@ -32,4 +32,75 @@
     ],
     "answer": "Cascading Style Sheets"
   }
+  ,
+  {
+    "id": 5,
+    "category": "C",
+    "question": "Which symbol is used to end a statement in C?",
+    "options": [";", ":", ".", ","],
+    "answer": ";"
+  },
+  {
+    "id": 6,
+    "category": "C",
+    "question": "Which function is used to print output in C?",
+    "options": ["print()", "printf()", "cout", "echo"],
+    "answer": "printf()"
+  },
+  {
+    "id": 7,
+    "category": "C++",
+    "question": "Which keyword is used to create an object in C++?",
+    "options": ["class", "struct", "new", "malloc"],
+    "answer": "new"
+  },
+  {
+    "id": 8,
+    "category": "C++",
+    "question": "Which of these supports OOP concepts?",
+    "options": ["C", "Assembly", "C++", "HTML"],
+    "answer": "C++"
+  },
+  {
+    "id": 9,
+    "category": "Java",
+    "question": "Which keyword is used to inherit a class in Java?",
+    "options": ["implements", "inherits", "extends", "super"],
+    "answer": "extends"
+  },
+  {
+    "id": 10,
+    "category": "Java",
+    "question": "Java is a ___ language.",
+    "options": ["Low-level", "Machine", "Platform-independent", "Assembly"],
+    "answer": "Platform-independent"
+  },
+  {
+    "id": 11,
+    "category": "JavaScript",
+    "question": "Which keyword declares a variable in JavaScript?",
+    "options": ["int", "var", "define", "letit"],
+    "answer": "var"
+  },
+  {
+    "id": 12,
+    "category": "JavaScript",
+    "question": "Which symbol is used for comments in JavaScript?",
+    "options": ["<!-- -->", "//", "#", "**"],
+    "answer": "//"
+  },
+  {
+    "id": 13,
+    "category": "SQL",
+    "question": "Which SQL command is used to fetch data?",
+    "options": ["GET", "FETCH", "SELECT", "OPEN"],
+    "answer": "SELECT"
+  },
+  {
+    "id": 14,
+    "category": "SQL",
+    "question": "Which clause is used to filter records?",
+    "options": ["ORDER BY", "WHERE", "GROUP BY", "HAVING"],
+    "answer": "WHERE"
+  }
 ]
