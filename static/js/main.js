@@ -153,3 +153,54 @@ retryBtn.addEventListener("click", () => {
     document.getElementById("result").classList.add("hidden");
     retryBtn.style.display = "none"; // Hide button until next submit
 });
+/* =======================
+   Results Dashboard Logic
+   ======================= */
+document.addEventListener("DOMContentLoaded", () => {
+    const dashboard = document.getElementById("dashboard-cards");
+    const noData = document.getElementById("no-data");
+
+    // Run only on dashboard page
+    if (!dashboard) return;
+
+    const progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
+
+    const categories = Object.keys(progress);
+
+    if (categories.length === 0) {
+        noData.classList.remove("hidden");
+        return;
+    }
+
+    noData.classList.add("hidden");
+
+    categories.forEach(category => {
+        const data = progress[category];
+        const attempts = data.attempts || 0;
+        const best = data.best || 0;
+        const last = data.last || 0;
+
+        const percent = last > 0 ? Math.round((best / last) * 100) : 0;
+
+        const card = document.createElement("div");
+        card.className = "dashboard-card";
+
+        card.innerHTML = `
+            <h3 class="dashboard-category">${category}</h3>
+
+            <div class="dashboard-progress">
+                <div class="dashboard-progress-bar">
+                    <div class="dashboard-progress-fill" style="width:${percent}%"></div>
+                </div>
+                <span class="dashboard-percent">${percent}%</span>
+            </div>
+
+            <div class="dashboard-stats">
+                <p><b>Attempts:</b> ${attempts}</p>
+                <p><b>Best Score:</b> ${best}</p>
+            </div>
+        `;
+
+        dashboard.appendChild(card);
+    });
+});

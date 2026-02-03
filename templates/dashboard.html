@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Results Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <main class="dashboard-container">
+    <header class="dashboard-header">
+      <h1>Your Progress Dashboard</h1>
+      <p>Track your best performance across all categories</p>
+    </header>
+
+    <section id="dashboard-cards" class="dashboard-cards">
+      <!-- JS will inject category cards here -->
+    </section>
+
+    <section id="no-data" class="no-data hidden">
+      <p>No quiz attempts yet. Take a quiz to see your progress.</p>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
