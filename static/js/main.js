@@ -108,20 +108,25 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Start 60-second countdown timer
-let quizTime = 60; // seconds
-const timerEl = document.getElementById("time");
-const timerInterval = setInterval(() => {
-    if (quizTime <= 0) {
-        clearInterval(timerInterval);
-        submitQuiz();
-    } else {
-        quizTime--;
-        if (timerEl) timerEl.innerText = quizTime;
-    }
-}, 1000);
+document.addEventListener("DOMContentLoaded", () => {
+    const timerEl = document.getElementById("time");
+    if (!timerEl) return;
+
+    let quizTime = 60; // seconds
+    const timerInterval = setInterval(() => {
+        if (quizTime <= 0) {
+            clearInterval(timerInterval);
+            submitQuiz();
+        } else {
+            quizTime--;
+            timerEl.innerText = quizTime;
+        }
+    }, 1000);
+});
 
 const retryBtn = document.getElementById("retry-btn");
 
+if (retryBtn) {
 retryBtn.addEventListener("click", () => {
     const allCards = document.querySelectorAll(".quiz-card");
     const retryQuestionsIds = JSON.parse(localStorage.getItem("retryQuestions")) || [];
@@ -153,9 +158,11 @@ retryBtn.addEventListener("click", () => {
     document.getElementById("result").classList.add("hidden");
     retryBtn.style.display = "none"; // Hide button until next submit
 });
-/* =======================
-   Results Dashboard Logic
-   ======================= */
+}
+
+// =======================
+//    Results Dashboard Logic (FINAL FIX)
+// =======================
 document.addEventListener("DOMContentLoaded", () => {
     const dashboard = document.getElementById("dashboard-cards");
     const noData = document.getElementById("no-data");
@@ -163,9 +170,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Run only on dashboard page
     if (!dashboard) return;
 
-    const progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
+    let categories = [];
 
-    const categories = Object.keys(progress);
+    // Read bestScore_* keys (actual source of truth)
+    Object.keys(localStorage).forEach(key => {
+        if (key.startsWith("bestScore_")) {
+            categories.push(key.replace("bestScore_", ""));
+        }
+    });
 
     if (categories.length === 0) {
         noData.classList.remove("hidden");
@@ -175,12 +187,11 @@ document.addEventListener("DOMContentLoaded", () => {
     noData.classList.add("hidden");
 
     categories.forEach(category => {
-        const data = progress[category];
-        const attempts = data.attempts || 0;
-        const best = data.best || 0;
-        const last = data.last || 0;
+        const best = parseInt(localStorage.getItem(`bestScore_${category}`)) || 0;
 
-        const percent = last > 0 ? Math.round((best / last) * 100) : 0;
+        // Default total questions = 5 (safe assumption)
+        const total = 5;
+        const percent = Math.round((best / total) * 100);
 
         const card = document.createElement("div");
         card.className = "dashboard-card";
@@ -196,8 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
 
             <div class="dashboard-stats">
-                <p><b>Attempts:</b> ${attempts}</p>
-                <p><b>Best Score:</b> ${best}</p>
+                <p><b>Best Score:</b> ${best} / ${total}</p>
             </div>
         `;
 

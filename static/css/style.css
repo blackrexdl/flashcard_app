@@ -305,3 +305,176 @@ body:not([data-theme="dark"]) .card li,
 body:not([data-theme="dark"]) .card span {
     color: var(--text-muted);
 }
+/* =========================
+   Dashboard – Professional UI (Theme Aligned)
+   ========================= */
+
+.dashboard-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Header */
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dashboard-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dashboard-subtitle {
+  margin-top: 0.4rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+/* Home button */
+.dashboard-home-btn {
+  text-decoration: none;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid var(--text-muted);
+  color: var(--text);
+  background: transparent;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.dashboard-home-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+/* Grid layout */
+.dashboard-cards.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.2rem;
+}
+
+/* Dashboard card */
+.dashboard-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-category {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  color: var(--text);
+}
+
+/* Progress bar */
+.dashboard-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.dashboard-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.dashboard-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border-radius: 50px;
+  transition: width 0.4s ease;
+}
+
+.dashboard-percent {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* Stats */
+.dashboard-stats p {
+  font-size: 0.85rem;
+  margin: 0.15rem 0;
+  color: var(--text-muted);
+}
+
+/* No data section */
+.no-data {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.start-quiz-btn {
+  display: inline-block;
+  margin-top: 0.8rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.start-quiz-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+/* Dark theme support */
+[data-theme="dark"] .dashboard-progress-bar {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* =========================
+   Dashboard Background Match
+   ========================= */
+
+/* Page-level background consistency */
+.dashboard-page {
+  background: var(--bg);
+  min-height: calc(100vh - 70px);
+}
+
+/* Soft section background for focus */
+.dashboard-container {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.02),
+    rgba(0, 0, 0, 0)
+  );
+  border-radius: 16px;
+}
+
+/* Dark theme subtle background */
+[data-theme="dark"] .dashboard-container {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0)
+  );
+}

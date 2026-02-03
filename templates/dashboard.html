@@ -4,25 +4,29 @@
   <meta charset="UTF-8">
   <title>Results Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
   <main class="dashboard-container">
     <header class="dashboard-header">
-      <h1>Your Progress Dashboard</h1>
-      <p>Track your best performance across all categories</p>
+      <div class="dashboard-header-top">
+        <h1>Your Progress Dashboard</h1>
+        <a href="/" class="dashboard-home-btn">Home</a>
+      </div>
+      <p class="dashboard-subtitle">Track your best performance across all categories</p>
     </header>
 
-    <section id="dashboard-cards" class="dashboard-cards">
+    <section id="dashboard-cards" class="dashboard-cards grid-layout">
       <!-- JS will inject category cards here -->
     </section>
 
     <section id="no-data" class="no-data hidden">
-      <p>No quiz attempts yet. Take a quiz to see your progress.</p>
+      <p>No quiz attempts yet.</p>
+      <a href="/categories" class="start-quiz-btn">Start a Quiz</a>
     </section>
   </main>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
