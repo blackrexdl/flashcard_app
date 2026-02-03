@@ -41,6 +41,10 @@ function submitQuiz() {
     });
 
     const total = quizCards.length;
+    const category =
+        document.body.dataset.category ||
+        document.getElementById("quiz-category")?.innerText ||
+        "General";
     const resultBox = document.getElementById("result");
 
     let message = "Keep practicing 👍";
@@ -59,6 +63,23 @@ function submitQuiz() {
     localStorage.setItem("lastQuizTotal", total);
     localStorage.setItem("retryQuestionsCount", retryQuestions.length);
     localStorage.setItem("retryQuestions", JSON.stringify(retryQuestions));
+
+    // ---- Best score tracking per category ----
+    const bestKey = `bestScore_${category}`;
+    const prevBest = parseInt(localStorage.getItem(bestKey) || "0", 10);
+    const bestScore = Math.max(prevBest, score);
+    localStorage.setItem(bestKey, bestScore);
+
+    const percent = Math.round((bestScore / total) * 100);
+
+    const box = document.getElementById("best-score-box");
+    if (box) {
+        document.getElementById("best-category").innerText = category;
+        document.getElementById("best-percent").innerText = percent;
+        document.getElementById("progress-fill").style.width = percent + "%";
+        box.classList.remove("hidden");
+    }
+    // ------------------------------------------
 
     // Display last score
     displayLastScore();
