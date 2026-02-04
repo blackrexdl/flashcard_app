@@ -166,6 +166,17 @@ retryBtn.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
     const dashboard = document.getElementById("dashboard-cards");
 
+    const summaryBox = document.createElement("div");
+    summaryBox.className = "dashboard-summary";
+
+    summaryBox.innerHTML = `
+      <div class="summary-card">
+        <h2 id="overall-score">0%</h2>
+        <p>Overall Performance</p>
+      </div>
+    `;
+    dashboard.parentElement.insertBefore(summaryBox, dashboard);
+
     const chartArea = document.createElement("div");
     chartArea.className = "dashboard-charts";
 
@@ -197,12 +208,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     noData.classList.add("hidden");
 
+    let totalPercent = 0;
+
     categories.forEach(category => {
         const best = parseInt(localStorage.getItem(`bestScore_${category}`)) || 0;
 
         // Default total questions = 5 (safe assumption)
         const total = 5;
         const percent = Math.round((best / total) * 100);
+
+        totalPercent += percent;
 
         const card = document.createElement("div");
         card.className = "dashboard-card";
@@ -224,6 +239,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dashboard.appendChild(card);
     });
+
+    const overall = Math.round(totalPercent / categories.length);
+    const overallEl = document.getElementById("overall-score");
+    if (overallEl) {
+      overallEl.innerText = overall + "%";
+    }
 
     const chartData = {};
     categories.forEach(cat => {
