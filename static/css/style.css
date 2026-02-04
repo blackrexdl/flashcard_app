@@ -316,7 +316,13 @@ body:not([data-theme="dark"]) .card span {
 
 /* Header */
 .dashboard-header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .dashboard-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .dashboard-header-top {
@@ -378,7 +384,7 @@ body:not([data-theme="dark"]) .card span {
 }
 
 .dashboard-category {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.8rem;
   color: var(--text);
@@ -457,6 +463,30 @@ body:not([data-theme="dark"]) .card span {
 }
 
 /* =========================
+   Dashboard Charts
+   ========================= */
+
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-charts canvas {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================
    Dashboard – Unified Page Layout
    ========================= */
 
@@ -481,9 +511,6 @@ body:not([data-theme="dark"]) .card span {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-[data-theme="dark"] .dashboard-page .navbar {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
 [data-theme="dark"] .dashboard-page .navbar {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }

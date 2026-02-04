@@ -165,6 +165,17 @@ retryBtn.addEventListener("click", () => {
 // =======================
 document.addEventListener("DOMContentLoaded", () => {
     const dashboard = document.getElementById("dashboard-cards");
+
+    const chartArea = document.createElement("div");
+    chartArea.className = "dashboard-charts";
+
+    chartArea.innerHTML = `
+      <canvas id="barChart" height="120"></canvas>
+      <canvas id="donutChart" height="140"></canvas>
+    `;
+
+    dashboard.parentElement.insertBefore(chartArea, dashboard);
+
     const noData = document.getElementById("no-data");
 
     // Run only on dashboard page
@@ -213,4 +224,68 @@ document.addEventListener("DOMContentLoaded", () => {
 
         dashboard.appendChild(card);
     });
+
+    const chartData = {};
+    categories.forEach(cat => {
+      chartData[cat] = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
+    });
+
+    renderBarChart(chartData);
+    renderDonutChart(chartData);
 });
+
+/* =======================
+   Dashboard Charts
+   ======================= */
+
+function renderBarChart(data) {
+  const canvas = document.getElementById("barChart");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+
+  const labels = Object.keys(data);
+  const values = Object.values(data);
+
+  const max = Math.max(...values, 5);
+  const width = canvas.width = canvas.offsetWidth;
+  const height = canvas.height;
+
+  ctx.clearRect(0, 0, width, height);
+
+  const barWidth = width / (labels.length * 2);
+
+  values.forEach((val, i) => {
+    const x = (i * 2 + 1) * barWidth;
+    const barHeight = (val / max) * (height - 30);
+
+    ctx.fillStyle = "#22c55e";
+    ctx.fillRect(x, height - barHeight, barWidth, barHeight);
+
+    ctx.fillStyle = "#888";
+    ctx.fillText(labels[i], x, height - 5);
+  });
+}
+
+function renderDonutChart(data) {
+  const canvas = document.getElementById("donutChart");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+
+  const values = Object.values(data);
+  const total = values.reduce((a, b) => a + b, 0) || 1;
+
+  let start = 0;
+  const centerX = canvas.width = canvas.offsetWidth / 2;
+  const centerY = canvas.height / 2;
+  const radius = Math.min(centerX, centerY) - 10;
+
+  values.forEach((val, i) => {
+    const slice = (val / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.strokeStyle = `hsl(${i * 60}, 70%, 50%)`;
+    ctx.lineWidth = 18;
+    ctx.arc(centerX, centerY, radius, start, start + slice);
+    ctx.stroke();
+    start += slice;
+  });
+}
