@@ -314,6 +314,38 @@ body:not([data-theme="dark"]) .card span {
     color: var(--text-muted);
 }
 
+/* Dashboard Summary */
+.dashboard-summary {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.summary-card {
+  background: linear-gradient(
+    135deg,
+    var(--accent),
+    #4338ca
+  );
+  color: #fff;
+  padding: 1.4rem 2.2rem;
+  border-radius: 16px;
+  text-align: center;
+  min-width: 220px;
+  box-shadow: 0 14px 32px rgba(79, 70, 229, 0.35);
+}
+
+.summary-card h2 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.summary-card p {
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
 /* Header */
 .dashboard-header {
   margin-bottom: 2.2rem;
@@ -342,6 +374,49 @@ body:not([data-theme="dark"]) .card span {
   margin-top: 0.4rem;
   font-size: 0.95rem;
   color: var(--text-muted);
+}
+
+/* Dashboard controls */
+.dashboard-header-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.reset-progress-btn {
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #ef4444;
+  background: transparent;
+  color: #ef4444;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.reset-progress-btn:hover {
+  background: #ef4444;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.dashboard-filter {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.dashboard-filter label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.dashboard-filter select {
+  padding: 0.45rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: var(--card);
+  color: var(--text);
 }
 
 /* Home button */
@@ -524,5 +599,226 @@ body:not([data-theme="dark"]) .card span {
   from {
     opacity: 0;
     transform: translateY(10px);
+  }
+}
+
+/* === Dashboard Controls: Dark Mode Fixes === */
+[data-theme="dark"] .dashboard-filter select {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .reset-progress-btn {
+  border-color: #f87171;
+  color: #f87171;
+}
+
+[data-theme="dark"] .reset-progress-btn:hover {
+  background: #f87171;
+  color: #020617;
+}
+
+/* =========================
+   DASHBOARD – PROFESSIONAL FIX (CSS ONLY)
+   ========================= */
+
+/* Page background harmony */
+.dashboard-page,
+body {
+  min-height: 100vh;
+  background: radial-gradient(
+    1200px 600px at top center,
+    #1e293b,
+    #020617
+  );
+}
+
+/* Center main dashboard container */
+.dashboard-container {
+  max-width: 1100px;
+  margin: 2.5rem auto 3rem;
+  padding: 2.5rem;
+  background: linear-gradient(
+    180deg,
+    rgba(30, 41, 59, 0.92),
+    rgba(15, 23, 42, 0.98)
+  );
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* Header spacing & alignment */
+.dashboard-header {
+  margin-bottom: 2.2rem;
+}
+
+.dashboard-header-top {
+  align-items: center;
+}
+
+.dashboard-subtitle {
+  margin-top: 0.6rem;
+}
+
+/* Filter spacing */
+.dashboard-filter {
+  margin-top: 1.2rem;
+}
+
+/* Charts layout fix */
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr;
+  align-items: center;
+  gap: 2rem;
+  margin: 2.5rem 0 3rem;
+}
+
+/* Chart card alignment */
+.dashboard-charts canvas {
+  height: 280px !important;
+  max-height: 280px;
+}
+
+/* Overall performance card centering */
+.dashboard-summary {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem 0;
+}
+
+/* Summary card refinement */
+.summary-card {
+  min-width: 260px;
+  padding: 1.6rem 2.4rem;
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    #6366f1,
+    #4338ca
+  );
+  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.45);
+}
+
+/* Cards grid alignment */
+.dashboard-cards.grid-layout {
+  margin-top: 1rem;
+  gap: 1.4rem;
+}
+
+/* Progress bar scale safety (no overflow visuals) */
+.dashboard-progress-fill {
+  max-width: 100%;
+}
+
+/* Fix percentages visually exceeding 100% */
+.dashboard-percent {
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Navbar consistency */
+.navbar a,
+.dashboard-home-btn {
+  color: #e5e7eb;
+}
+
+/* Mobile refinement */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1.6rem;
+    margin: 1.2rem;
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-summary {
+    margin: 2rem 0;
+  }
+}
+
+/* Smooth entrance */
+.dashboard-container {
+  animation: dashboardFade 0.6s ease both;
+}
+
+@keyframes dashboardFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* =========================
+   DASHBOARD ALIGNMENT RESET
+   ========================= */
+
+/* Force dashboard container as layout root */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Charts section – strict grid */
+.dashboard-charts {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.8rem;
+  margin: 2rem 0 1.8rem;
+}
+
+/* Each chart stays inside container */
+.dashboard-charts canvas {
+  width: 100% !important;
+  max-width: 100%;
+  height: 260px !important;
+}
+
+/* Summary always below charts */
+.dashboard-summary {
+  order: 3;
+  width: 100%;
+  margin: 2rem 0 2.5rem;
+  justify-content: center;
+}
+
+/* Cards grid follows summary */
+.dashboard-cards {
+  order: 4;
+  width: 100%;
+}
+
+/* Prevent overflow illusion */
+.dashboard-container * {
+  box-sizing: border-box;
+}
+
+/* Fix floating card illusion */
+.dashboard-card,
+.dashboard-charts canvas,
+.summary-card {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Remove visual drift */
+.dashboard-charts,
+.dashboard-summary,
+.dashboard-cards {
+  position: relative;
+  left: 0;
+  right: 0;
+}
+
+/* Mobile fix */
+@media (max-width: 768px) {
+  .dashboard-charts {
+    grid-template-columns: 1fr;
   }
 }

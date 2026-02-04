@@ -9,11 +9,22 @@
     <header class="dashboard-header">
       <div class="dashboard-header-top">
         <h1>Your Progress Dashboard</h1>
-        <a href="/" class="dashboard-home-btn">Home</a>
+        <div class="dashboard-header-actions">
+          <button id="reset-progress-btn" class="reset-progress-btn">
+            Reset Progress
+          </button>
+          <a href="/" class="dashboard-home-btn">Home</a>
+        </div>
       </div>
       <p class="dashboard-subtitle">
         Track your best performance across all categories
       </p>
+      <div class="dashboard-filter">
+        <label for="category-filter">Filter by category:</label>
+        <select id="category-filter">
+          <option value="all">All Categories</option>
+        </select>
+      </div>
     </header>
 
     <section class="dashboard-charts">

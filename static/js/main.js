@@ -166,6 +166,28 @@ retryBtn.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", () => {
     const dashboard = document.getElementById("dashboard-cards");
 
+    const resetBtn = document.getElementById("reset-progress-btn");
+
+    if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+            if (!confirm("Are you sure you want to reset all progress?")) return;
+
+            Object.keys(localStorage).forEach(key => {
+                if (
+                    key.startsWith("bestScore_") ||
+                    key === "lastQuizScore" ||
+                    key === "lastQuizTotal" ||
+                    key === "retryQuestions" ||
+                    key === "retryQuestionsCount"
+                ) {
+                    localStorage.removeItem(key);
+                }
+            });
+
+            location.reload();
+        });
+    }
+
     const summaryBox = document.createElement("div");
     summaryBox.className = "dashboard-summary";
 
@@ -193,6 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!dashboard) return;
 
     let categories = [];
+    let filteredCategories = [];
 
     // Read bestScore_* keys (actual source of truth)
     Object.keys(localStorage).forEach(key => {
@@ -201,6 +224,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    filteredCategories = [...categories];
+
+    const filterSelect = document.getElementById("category-filter");
+    if (filterSelect) {
+        categories.forEach(cat => {
+            const opt = document.createElement("option");
+            opt.value = cat;
+            opt.innerText = cat;
+            filterSelect.appendChild(opt);
+        });
+
+        filterSelect.addEventListener("change", () => {
+            const val = filterSelect.value;
+            filteredCategories = val === "all" ? [...categories] : [val];
+            renderDashboard();
+        });
+    }
+
     if (categories.length === 0) {
         noData.classList.remove("hidden");
         return;
@@ -208,51 +249,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
     noData.classList.add("hidden");
 
-    let totalPercent = 0;
+    function renderDashboard() {
+        dashboard.innerHTML = "";
+        let totalPercent = 0;
 
-    categories.forEach(category => {
-        const best = parseInt(localStorage.getItem(`bestScore_${category}`)) || 0;
+        filteredCategories.forEach(category => {
+            const best = parseInt(localStorage.getItem(`bestScore_${category}`)) || 0;
+            const total = 5;
+            const percent = Math.round((best / total) * 100);
 
-        // Default total questions = 5 (safe assumption)
-        const total = 5;
-        const percent = Math.round((best / total) * 100);
+            totalPercent += percent;
 
-        totalPercent += percent;
+            const card = document.createElement("div");
+            card.className = "dashboard-card";
 
-        const card = document.createElement("div");
-        card.className = "dashboard-card";
-
-        card.innerHTML = `
-            <h3 class="dashboard-category">${category}</h3>
-
-            <div class="dashboard-progress">
-                <div class="dashboard-progress-bar">
-                    <div class="dashboard-progress-fill" style="width:${percent}%"></div>
+            card.innerHTML = `
+                <h3 class="dashboard-category">${category}</h3>
+                <div class="dashboard-progress">
+                    <div class="dashboard-progress-bar">
+                        <div class="dashboard-progress-fill" style="width:${percent}%"></div>
+                    </div>
+                    <span class="dashboard-percent">${percent}%</span>
                 </div>
-                <span class="dashboard-percent">${percent}%</span>
-            </div>
+                <div class="dashboard-stats">
+                    <p><b>Best Score:</b> ${best} / ${total}</p>
+                </div>
+            `;
 
-            <div class="dashboard-stats">
-                <p><b>Best Score:</b> ${best} / ${total}</p>
-            </div>
-        `;
+            dashboard.appendChild(card);
+        });
 
-        dashboard.appendChild(card);
-    });
+        const overall = Math.round(totalPercent / filteredCategories.length);
+        const overallEl = document.getElementById("overall-score");
+        if (overallEl && !isNaN(overall)) {
+            overallEl.innerText = overall + "%";
+        }
 
-    const overall = Math.round(totalPercent / categories.length);
-    const overallEl = document.getElementById("overall-score");
-    if (overallEl) {
-      overallEl.innerText = overall + "%";
+        const chartData = {};
+        filteredCategories.forEach(cat => {
+            chartData[cat] = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
+        });
+
+        renderBarChart(chartData);
+        renderDonutChart(chartData);
     }
 
-    const chartData = {};
-    categories.forEach(cat => {
-      chartData[cat] = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
-    });
-
-    renderBarChart(chartData);
-    renderDonutChart(chartData);
+    renderDashboard();
 });
 
 /* =======================
