@@ -305,15 +305,6 @@ body:not([data-theme="dark"]) .card li,
 body:not([data-theme="dark"]) .card span {
     color: var(--text-muted);
 }
-/* =========================
-   Dashboard – Professional UI (Theme Aligned)
-   ========================= */
-
-.dashboard-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
 
 /* Header */
 .dashboard-header {
@@ -456,19 +447,25 @@ body:not([data-theme="dark"]) .card span {
 
 .dashboard-page {
   min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    var(--bg),
-    var(--bg)
-  );
+  background: var(--bg);
+  padding-top: 0;
 }
 
 /* Main dashboard content card */
 .dashboard-container {
   max-width: 1100px;
-  margin: 2rem auto 3rem;
-  padding: 2rem 2.5rem;
+  margin: 1.5rem auto 3rem;
+  padding: 2rem;
   background: var(--card);
-  border-radius: 18px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Dashboard navbar separator */
+.dashboard-page .navbar {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="dark"] .dashboard-page .navbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
