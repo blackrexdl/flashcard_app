@@ -28,9 +28,35 @@
     </header>
 
     <section class="dashboard-charts">
-      <!-- Charts injected by JS -->
-      <canvas id="barChart"></canvas>
-      <canvas id="donutChart"></canvas>
+
+      <!-- Progress overview (replaces donut) -->
+      <div class="stats-panel">
+        <h3 class="stats-title">Performance Summary</h3>
+
+        <div class="stats-list">
+          <div class="stat-item">
+            <span class="stat-label">Categories Attempted</span>
+            <span class="stat-value" id="stat-categories">0</span>
+          </div>
+
+          <div class="stat-item">
+            <span class="stat-label">Total Best Score</span>
+            <span class="stat-value" id="stat-best-score">0</span>
+          </div>
+
+          <div class="stat-item">
+            <span class="stat-label">Overall Accuracy</span>
+            <span class="stat-value" id="stat-accuracy">0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional bar chart (can be removed later if needed) -->
+      <div class="stats-panel">
+        <h3 class="stats-title">Category Performance</h3>
+        <canvas id="barChart"></canvas>
+      </div>
+
     </section>
 
     <section id="dashboard-cards" class="dashboard-cards grid-layout">

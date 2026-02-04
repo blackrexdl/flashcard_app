@@ -199,15 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     dashboard.parentElement.insertBefore(summaryBox, dashboard);
 
-    const chartArea = document.createElement("div");
-    chartArea.className = "dashboard-charts";
-
-    chartArea.innerHTML = `
-      <canvas id="barChart" height="120"></canvas>
-      <canvas id="donutChart" height="140"></canvas>
-    `;
-
-    dashboard.parentElement.insertBefore(chartArea, dashboard);
+    const chartArea = document.querySelector(".dashboard-charts");
 
     const noData = document.getElementById("no-data");
 
@@ -265,14 +257,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             card.innerHTML = `
                 <h3 class="dashboard-category">${category}</h3>
-                <div class="dashboard-progress">
-                    <div class="dashboard-progress-bar">
-                        <div class="dashboard-progress-fill" style="width:${percent}%"></div>
-                    </div>
-                    <span class="dashboard-percent">${percent}%</span>
-                </div>
-                <div class="dashboard-stats">
+
+                <div class="dashboard-text-stats">
                     <p><b>Best Score:</b> ${best} / ${total}</p>
+                    <p><b>Accuracy:</b> ${percent}%</p>
                 </div>
             `;
 
@@ -285,70 +273,28 @@ document.addEventListener("DOMContentLoaded", () => {
             overallEl.innerText = overall + "%";
         }
 
-        const chartData = {};
+        // ===========================
+        //   Populate new text stats
+        // ===========================
+        const categoriesEl = document.getElementById("stat-categories");
+        const bestScoreEl = document.getElementById("stat-best-score");
+        const accuracyEl = document.getElementById("stat-accuracy");
+
+        let totalBest = 0;
         filteredCategories.forEach(cat => {
-            chartData[cat] = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
+          totalBest += parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
         });
 
-        renderBarChart(chartData);
-        renderDonutChart(chartData);
+        if (categoriesEl) categoriesEl.innerText = filteredCategories.length;
+        if (bestScoreEl) bestScoreEl.innerText = totalBest;
+
+        const accuracy = Math.min(
+          100,
+          Math.round(totalBest / (filteredCategories.length * 5) * 100)
+        );
+
+        if (accuracyEl) accuracyEl.innerText = accuracy + "%";
     }
 
     renderDashboard();
 });
-
-/* =======================
-   Dashboard Charts
-   ======================= */
-
-function renderBarChart(data) {
-  const canvas = document.getElementById("barChart");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-
-  const labels = Object.keys(data);
-  const values = Object.values(data);
-
-  const max = Math.max(...values, 5);
-  const width = canvas.width = canvas.offsetWidth;
-  const height = canvas.height;
-
-  ctx.clearRect(0, 0, width, height);
-
-  const barWidth = width / (labels.length * 2);
-
-  values.forEach((val, i) => {
-    const x = (i * 2 + 1) * barWidth;
-    const barHeight = (val / max) * (height - 30);
-
-    ctx.fillStyle = "#22c55e";
-    ctx.fillRect(x, height - barHeight, barWidth, barHeight);
-
-    ctx.fillStyle = "#888";
-    ctx.fillText(labels[i], x, height - 5);
-  });
-}
-
-function renderDonutChart(data) {
-  const canvas = document.getElementById("donutChart");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-
-  const values = Object.values(data);
-  const total = values.reduce((a, b) => a + b, 0) || 1;
-
-  let start = 0;
-  const centerX = canvas.width = canvas.offsetWidth / 2;
-  const centerY = canvas.height / 2;
-  const radius = Math.min(centerX, centerY) - 10;
-
-  values.forEach((val, i) => {
-    const slice = (val / total) * Math.PI * 2;
-    ctx.beginPath();
-    ctx.strokeStyle = `hsl(${i * 60}, 70%, 50%)`;
-    ctx.lineWidth = 18;
-    ctx.arc(centerX, centerY, radius, start, start + slice);
-    ctx.stroke();
-    start += slice;
-  });
-}

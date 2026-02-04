@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body class="{% if request.path == '/dashboard' %}is-dashboard{% endif %}">
 <nav class="navbar">
     <h2>FlashLearn</h2>
     <div>
-        <a href="/">Home</a>
-        <a href="/flashcards">Flashcards</a>
-        <a href="/categories">Quiz</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/about">About</a>
+        <a class="nav-btn-start-home" href="/">Home</a>
+        <a class="nav-link" href="/flashcards">Flashcards</a>
+        <a class="nav-link" href="/categories">Quiz</a>
+        <a class="nav-link" href="/dashboard">Dashboard</a>
+        <a class="nav-link" href="/about">About</a>
         <label class="switch" aria-label="Toggle dark/light theme">
             <input type="checkbox" id="theme-toggle">
             <span class="slider round"></span>
@@ -144,5 +144,6 @@ input:checked + .slider:before {
   }
 }
 </style>
+
 </body>
 </html>

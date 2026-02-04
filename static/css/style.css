@@ -538,287 +538,55 @@ body:not([data-theme="dark"]) .card span {
 }
 
 /* =========================
-   Dashboard Charts
+   DASHBOARD – CLEAN RESET (PREP FOR TEXT STATS)
    ========================= */
 
-.dashboard-charts {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.dashboard-charts canvas {
-  background: var(--card);
-  border-radius: 14px;
-  padding: 1rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
-
-@media (max-width: 768px) {
-  .dashboard-charts {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* =========================
-   Dashboard – Unified Page Layout
-   ========================= */
-
-.dashboard-page {
-  min-height: 100vh;
-  background: var(--bg);
-  padding-top: 0;
-}
-
-/* Main dashboard content card */
+/* Neutral dashboard container */
 .dashboard-container {
+  display: block;
   max-width: 1100px;
-  margin: 1.5rem auto 3rem;
+  margin: 2rem auto 3rem;
   padding: 2rem;
-  background: var(--card);
   border-radius: 16px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
 }
 
-/* Dashboard navbar separator */
-.dashboard-page .navbar {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-[data-theme="dark"] .dashboard-page .navbar {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-/* Dashboard subtle entrance */
-.dashboard-card {
-  animation: fadeUp 0.5s ease both;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-}
-
-/* === Dashboard Controls: Dark Mode Fixes === */
-[data-theme="dark"] .dashboard-filter select {
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-[data-theme="dark"] .reset-progress-btn {
-  border-color: #f87171;
-  color: #f87171;
-}
-
-[data-theme="dark"] .reset-progress-btn:hover {
-  background: #f87171;
-  color: #020617;
-}
-
-/* =========================
-   DASHBOARD – PROFESSIONAL FIX (CSS ONLY)
-   ========================= */
-
-/* Page background harmony */
-.dashboard-page,
-body {
-  min-height: 100vh;
-  background: radial-gradient(
-    1200px 600px at top center,
-    #1e293b,
-    #020617
-  );
-}
-
-/* Center main dashboard container */
-.dashboard-container {
-  max-width: 1100px;
-  margin: 2.5rem auto 3rem;
-  padding: 2.5rem;
-  background: linear-gradient(
-    180deg,
-    rgba(30, 41, 59, 0.92),
-    rgba(15, 23, 42, 0.98)
-  );
-  border-radius: 20px;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
-}
-
-/* Header spacing & alignment */
-.dashboard-header {
-  margin-bottom: 2.2rem;
-}
-
-.dashboard-header-top {
-  align-items: center;
-}
-
-.dashboard-subtitle {
-  margin-top: 0.6rem;
-}
-
-/* Filter spacing */
-.dashboard-filter {
-  margin-top: 1.2rem;
-}
-
-/* Charts layout fix */
-.dashboard-charts {
-  display: grid;
-  grid-template-columns: 1.4fr 0.9fr;
-  align-items: center;
-  gap: 2rem;
-  margin: 2.5rem 0 3rem;
-}
-
-/* Chart card alignment */
+/* Disable all chart drawing behavior */
 .dashboard-charts canvas {
-  height: 280px !important;
-  max-height: 280px;
+  all: unset;
 }
 
-/* Overall performance card centering */
-.dashboard-summary {
-  display: flex;
-  justify-content: center;
-  margin: 2.5rem 0;
-}
-
-/* Summary card refinement */
-.summary-card {
-  min-width: 260px;
-  padding: 1.6rem 2.4rem;
-  border-radius: 18px;
-  background: linear-gradient(
-    135deg,
-    #6366f1,
-    #4338ca
-  );
-  box-shadow: 0 20px 40px rgba(99, 102, 241, 0.45);
-}
-
-/* Cards grid alignment */
-.dashboard-cards.grid-layout {
-  margin-top: 1rem;
-  gap: 1.4rem;
-}
-
-/* Progress bar scale safety (no overflow visuals) */
-.dashboard-progress-fill {
-  max-width: 100%;
-}
-
-/* Fix percentages visually exceeding 100% */
-.dashboard-percent {
-  min-width: 40px;
-  text-align: right;
-}
-
-/* Navbar consistency */
-.navbar a,
-.dashboard-home-btn {
-  color: #e5e7eb;
-}
-
-/* Mobile refinement */
-@media (max-width: 768px) {
-  .dashboard-container {
-    padding: 1.6rem;
-    margin: 1.2rem;
-  }
-
-  .dashboard-charts {
-    grid-template-columns: 1fr;
-  }
-
-  .dashboard-summary {
-    margin: 2rem 0;
-  }
-}
-
-/* Smooth entrance */
-.dashboard-container {
-  animation: dashboardFade 0.6s ease both;
-}
-
-@keyframes dashboardFade {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-/* =========================
-   DASHBOARD ALIGNMENT RESET
-   ========================= */
-
-/* Force dashboard container as layout root */
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-
-/* Charts section – strict grid */
+/* Dashboard panels (used for stats next) */
 .dashboard-charts {
-  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.8rem;
-  margin: 2rem 0 1.8rem;
-}
-
-/* Each chart stays inside container */
-.dashboard-charts canvas {
-  width: 100% !important;
-  max-width: 100%;
-  height: 260px !important;
-}
-
-/* Summary always below charts */
-.dashboard-summary {
-  order: 3;
-  width: 100%;
+  gap: 1.5rem;
   margin: 2rem 0 2.5rem;
-  justify-content: center;
 }
 
-/* Cards grid follows summary */
-.dashboard-cards {
-  order: 4;
-  width: 100%;
+.dashboard-charts > * {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 1.6rem;
+  box-shadow:
+    0 10px 26px rgba(0,0,0,0.12),
+    inset 0 0 0 1px rgba(0,0,0,0.04);
 }
 
-/* Prevent overflow illusion */
-.dashboard-container * {
-  box-sizing: border-box;
+/* Dark mode */
+[data-theme="dark"] .dashboard-charts > * {
+  background: #0b1220;
+  box-shadow:
+    0 18px 36px rgba(0,0,0,0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.06);
 }
 
-/* Fix floating card illusion */
-.dashboard-card,
-.dashboard-charts canvas,
-.summary-card {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Remove visual drift */
-.dashboard-charts,
-.dashboard-summary,
-.dashboard-cards {
-  position: relative;
-  left: 0;
-  right: 0;
-}
-
-/* Mobile fix */
-@media (max-width: 768px) {
+/* Responsive */
+@media (max-width: 900px) {
   .dashboard-charts {
     grid-template-columns: 1fr;
   }
+}
+/* Hide Home button only on Dashboard page */
+body.is-dashboard .nav-btn-start-home {
+  display: none;
 }
