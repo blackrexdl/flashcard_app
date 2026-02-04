@@ -25,7 +25,7 @@ body {
 
 .navbar {
     padding: 15px 30px;
-    background: var(--card);
+    background: transparent;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -451,30 +451,24 @@ body:not([data-theme="dark"]) .card span {
 }
 
 /* =========================
-   Dashboard Background Match
+   Dashboard – Unified Page Layout
    ========================= */
 
-/* Page-level background consistency */
 .dashboard-page {
-  background: var(--bg);
-  min-height: calc(100vh - 70px);
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    var(--bg),
+    var(--bg)
+  );
 }
 
-/* Soft section background for focus */
+/* Main dashboard content card */
 .dashboard-container {
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.02),
-    rgba(0, 0, 0, 0)
-  );
-  border-radius: 16px;
-}
-
-/* Dark theme subtle background */
-[data-theme="dark"] .dashboard-container {
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.04),
-    rgba(255, 255, 255, 0)
-  );
+  max-width: 1100px;
+  margin: 2rem auto 3rem;
+  padding: 2rem 2.5rem;
+  background: var(--card);
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.15);
 }
