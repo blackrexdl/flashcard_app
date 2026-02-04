@@ -24,11 +24,19 @@ body {
 }
 
 .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
     padding: 15px 30px;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+[data-theme="dark"] .navbar {
+    background: rgba(15, 23, 42, 0.75);
 }
 
 .navbar a {
@@ -365,8 +373,8 @@ body:not([data-theme="dark"]) .card span {
 }
 
 .dashboard-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16);
 }
 
 .dashboard-category {
@@ -396,7 +404,14 @@ body:not([data-theme="dark"]) .card span {
   height: 100%;
   background: linear-gradient(90deg, #22c55e, #16a34a);
   border-radius: 50px;
-  transition: width 0.4s ease;
+  transition: width 0.6s ease;
+  animation: growBar 0.8s ease-out;
+}
+
+@keyframes growBar {
+  from {
+    width: 0;
+  }
 }
 
 .dashboard-percent {
@@ -468,4 +483,19 @@ body:not([data-theme="dark"]) .card span {
 
 [data-theme="dark"] .dashboard-page .navbar {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .dashboard-page .navbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Dashboard subtle entrance */
+.dashboard-card {
+  animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
