@@ -199,8 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     dashboard.parentElement.insertBefore(summaryBox, dashboard);
 
-    const chartArea = document.querySelector(".dashboard-charts");
-
     const noData = document.getElementById("no-data");
 
     // Run only on dashboard page
@@ -265,6 +263,29 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
 
             dashboard.appendChild(card);
+
+            const categoryContainer = document.getElementById("category-performance");
+
+            if (categoryContainer) {
+                categoryContainer.innerHTML = "";
+
+                filteredCategories.forEach(category => {
+                    const best = parseInt(localStorage.getItem(`bestScore_${category}`)) || 0;
+                    const total = 5;
+                    const percent = Math.round((best / total) * 100);
+
+                    const row = document.createElement("div");
+                    row.className = "category-performance-row";
+
+                    row.innerHTML = `
+                        <span class="category-name">${category}</span>
+                        <span class="category-score">${best}/${total}</span>
+                        <span class="category-percent">${percent}%</span>
+                    `;
+
+                    categoryContainer.appendChild(row);
+                });
+            }
         });
 
         const overall = Math.round(totalPercent / filteredCategories.length);
