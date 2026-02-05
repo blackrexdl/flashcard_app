@@ -25,7 +25,6 @@
 
     <button id="submit-btn" type="button" class="btn" onclick="submitQuiz()">Submit Quiz</button>
     <button id="next-quiz-btn" type="button" class="btn hidden" onclick="nextQuiz()">New Quiz</button>
-    <p id="timer">Time left: <span id="time">60</span>s</p>
     <div id="result" class="card hidden"></div>
     <div id="best-score-box" class="best-score-box hidden">
       <p class="best-score-text">
@@ -40,15 +39,12 @@
     <script>
 let currentIndex = 0;
 let score = 0;
-let timeLeft = 15;
-let timer;
 let completed = false;
 let incorrectCards = [];
 
 const quizCards = document.querySelectorAll('.quiz-card');
 const total = quizCards.length;
 const submitBtn = document.getElementById('submit-btn');
-const timerEl = document.getElementById('timer');
 const resultEl = document.getElementById('result');
 
 // Category passed from Flask
@@ -62,28 +58,10 @@ quizCards.forEach((card, index) => {
   card.style.display = index === 0 ? 'block' : 'none';
 });
 
-function startTimer() {
-  timeLeft = 15;
-  document.getElementById('time').innerText = timeLeft;
-
-  timer = setInterval(() => {
-    timeLeft--;
-    document.getElementById('time').innerText = timeLeft;
-
-    if (timeLeft === 0) {
-      clearInterval(timer);
-      nextQuestion(null, quizCards[currentIndex].dataset.answer);
-    }
-  }, 1000);
-}
-
-startTimer();
-
 quizCards.forEach(card => {
   const options = card.querySelectorAll('input');
   options.forEach(opt => {
     opt.addEventListener('change', () => {
-      clearInterval(timer);
       nextQuestion(opt.value, card.dataset.answer);
     });
   });
@@ -127,11 +105,8 @@ function nextQuestion(selected, correct) {
 
     if (currentIndex < quizCards.length) {
       quizCards[currentIndex].style.display = 'block';
-      startTimer();
     } else {
       completed = true;
-      clearInterval(timer);
-      timerEl.style.display = 'none';
       submitBtn.classList.remove('hidden');
     }
   }, 800);
@@ -212,10 +187,6 @@ function retryIncorrect() {
   submitBtn.classList.add('hidden');
   document.getElementById('retry-btn').classList.add('hidden');
   resultEl.classList.add('hidden');
-  timerEl.style.display = 'block';
-
-  quizCards = document.querySelectorAll('.quiz-card');
-  startTimer();
 }
 </script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>

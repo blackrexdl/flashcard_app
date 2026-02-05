@@ -107,22 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
     displayLastScore();
 });
 
-// Start 60-second countdown timer
-document.addEventListener("DOMContentLoaded", () => {
-    const timerEl = document.getElementById("time");
-    if (!timerEl) return;
-
-    let quizTime = 60; // seconds
-    const timerInterval = setInterval(() => {
-        if (quizTime <= 0) {
-            clearInterval(timerInterval);
-            submitQuiz();
-        } else {
-            quizTime--;
-            timerEl.innerText = quizTime;
-        }
-    }, 1000);
-});
 
 const retryBtn = document.getElementById("retry-btn");
 
