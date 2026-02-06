@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body class="{% if request.path == '/dashboard' %}is-dashboard{% endif %}">
+<body class="{% if request.path.startswith('/dashboard') %}is-dashboard{% endif %}">
 <nav class="navbar">
     <h2>FlashLearn</h2>
     <div>
