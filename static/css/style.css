@@ -183,12 +183,6 @@ body {
 .back {
     transform: rotateY(180deg);
 }
-.quiz-card {
-    background: var(--card);
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-}
 
 .question {
     font-weight: 600;
@@ -244,10 +238,6 @@ body {
     font-style: italic;
     color: var(--text);
 }
-#timer {
-    font-weight: 600;
-    margin-bottom: 20px;
-}
 
 /* =========================
    QUIZ PAGE – UI POLISH
@@ -291,9 +281,8 @@ body {
   cursor: pointer;
 }
 
-/* Progress + timer alignment */
-#progress,
-#timer {
+/* Progress alignment */
+#progress {
   text-align: center;
   font-size: 0.9rem;
   color: var(--text-muted);
@@ -434,11 +423,6 @@ button, a {
 
   [data-theme="dark"] .option {
     background: rgba(255,255,255,0.05);
-  }
-
-  #timer {
-    font-size: 1rem;
-    text-align: center;
   }
 }
 
@@ -676,7 +660,6 @@ body:not([data-theme="dark"]) .card span {
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* Dashboard uses text-based stats only (no charts, no donuts) */
 /* =========================
    DASHBOARD – CLEAN RESET (PREP FOR TEXT STATS)
    ========================= */
@@ -690,10 +673,6 @@ body:not([data-theme="dark"]) .card span {
   border-radius: 16px;
 }
 
-/* Disable all chart drawing behavior */
-.dashboard-charts canvas {
-  all: unset;
-}
 /* Hide Home button only on Dashboard page */
 body.is-dashboard .nav-btn-start-home {
   display: none;
@@ -1170,13 +1149,6 @@ input:checked + .slider:before {
   opacity: 0.9;
 }
 /* index page  */
-.dashboard-container {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center;
-    padding: 2rem;
-}
 
 .hero-card {
     background-color: #1f2937;
