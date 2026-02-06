@@ -1,22 +1,23 @@
-{% extends "base.html" %}
-
-{% block title %}Results Dashboard{% endblock %}
-
 {% block content %}
 <div class="dashboard-page">
   <main class="dashboard-container">
+
+    <!-- Header -->
     <header class="dashboard-header">
       <div class="dashboard-header-top">
         <h1>Your Progress Dashboard</h1>
+
         <div class="dashboard-header-actions">
           <button id="reset-progress-btn" class="reset-progress-btn">
             Reset Progress
           </button>
         </div>
       </div>
+
       <p class="dashboard-subtitle">
         Track your best performance across all categories
       </p>
+
       <div class="dashboard-filter">
         <label for="category-filter">Filter by category:</label>
         <select id="category-filter">
@@ -25,9 +26,9 @@
       </div>
     </header>
 
+    <!-- Stats -->
     <section class="dashboard-charts">
 
-      <!-- Progress overview (replaces donut) -->
       <div class="stats-panel">
         <h3 class="stats-title">Performance Summary</h3>
 
@@ -49,21 +50,22 @@
         </div>
       </div>
 
-      <!-- Optional bar chart (can be removed later if needed) -->
       <div class="stats-panel">
         <h3 class="stats-title">Category Performance</h3>
 
         <div id="category-performance" class="category-performance">
-          <!-- JS will inject category-wise text stats here -->
+          <!-- JS injects category stats -->
         </div>
       </div>
 
     </section>
 
+    <!-- Category cards -->
     <section id="dashboard-cards" class="dashboard-cards grid-layout">
-      <!-- JS injects cards here -->
+      <!-- JS injects cards -->
     </section>
 
+    <!-- Empty state -->
     <section id="no-data" class="no-data hidden">
       <p>No quiz attempts yet.</p>
       <a href="/categories" class="start-quiz-btn">Start a Quiz</a>
