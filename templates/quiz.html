@@ -5,6 +5,7 @@
   <h1 class="page-title">Quiz</h1>
 
   <div id="quiz-container">
+
     <p id="progress"></p>
 
     {% for q in questions %}
@@ -23,9 +24,17 @@
     </div>
     {% endfor %}
 
-    <button id="submit-btn" type="button" class="btn" onclick="submitQuiz()">Submit Quiz</button>
-    <button id="next-quiz-btn" type="button" class="btn hidden" onclick="nextQuiz()">New Quiz</button>
+    <!-- Actions -->
+    <div class="quiz-actions">
+      <button id="submit-btn" class="btn hidden" type="button">Submit Quiz</button>
+      <button id="next-quiz-btn" class="btn hidden" type="button">New Quiz</button>
+      <button id="retry-btn" class="btn hidden" type="button">Retry Incorrect</button>
+    </div>
+
+    <!-- Result -->
     <div id="result" class="card hidden"></div>
+
+    <!-- Best Score -->
     <div id="best-score-box" class="best-score-box hidden">
       <p class="best-score-text">
         Best Score (<span id="best-category"></span>):
@@ -35,8 +44,12 @@
         <div id="progress-fill"></div>
       </div>
     </div>
-    <button id="retry-btn" class="btn hidden" onclick="retryIncorrect()">Retry Incorrect</button>
-    <script>
+
+  </div>
+</div>
+
+<!-- Quiz Page Script -->
+<script>
 let currentIndex = 0;
 let score = 0;
 let completed = false;
@@ -44,23 +57,18 @@ let incorrectCards = [];
 
 const quizCards = document.querySelectorAll('.quiz-card');
 const total = quizCards.length;
+
 const submitBtn = document.getElementById('submit-btn');
+const nextBtn = document.getElementById('next-quiz-btn');
+const retryBtn = document.getElementById('retry-btn');
 const resultEl = document.getElementById('result');
 
-// Category passed from Flask
 const category = "{{ category|default('General') }}";
 
-// Hide submit initially
-submitBtn.classList.add('hidden');
-
-// Show only first question
 quizCards.forEach((card, index) => {
   card.style.display = index === 0 ? 'block' : 'none';
-});
 
-quizCards.forEach(card => {
-  const options = card.querySelectorAll('input');
-  options.forEach(opt => {
+  card.querySelectorAll('input').forEach(opt => {
     opt.addEventListener('change', () => {
       nextQuestion(opt.value, card.dataset.answer);
     });
@@ -71,33 +79,24 @@ function nextQuestion(selected, correct) {
   const currentCard = quizCards[currentIndex];
   if (!currentCard) return;
 
-  if (selected !== null) {
-    const options = currentCard.querySelectorAll('label.option');
+  const options = currentCard.querySelectorAll('label.option');
 
-    options.forEach(opt => {
-      opt.classList.add('disabled');
-      const input = opt.querySelector('input');
+  options.forEach(opt => {
+    const input = opt.querySelector('input');
+    input.disabled = true;
+    opt.classList.add('disabled');
 
-      if (input.value === correct) {
-        opt.classList.add('correct');
-      }
+    if (input.value === correct) opt.classList.add('correct');
+    if (input.value === selected && selected !== correct) opt.classList.add('wrong');
+  });
 
-      if (input.value === selected && selected !== correct) {
-        opt.classList.add('wrong');
-      }
-
-      input.disabled = true;
-    });
-
-    if (selected === correct) {
-      score++;
-    } else {
-      incorrectCards.push(currentCard.cloneNode(true));
-    }
-
-    const explanation = currentCard.querySelector('.explanation');
-    explanation.classList.remove('hidden');
+  if (selected === correct) {
+    score++;
+  } else {
+    incorrectCards.push(currentCard.cloneNode(true));
   }
+
+  currentCard.querySelector('.explanation').classList.remove('hidden');
 
   setTimeout(() => {
     currentCard.style.display = 'none';
@@ -109,59 +108,54 @@ function nextQuestion(selected, correct) {
       completed = true;
       submitBtn.classList.remove('hidden');
     }
-  }, 800);
+  }, 700);
 }
 
-function submitQuiz() {
+submitBtn.addEventListener('click', () => {
   if (!completed) return;
 
-  // ---- Progress Tracking ----
   const progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
 
   if (!progress[category]) {
     progress[category] = { attempts: 0, best: 0, last: 0 };
   }
 
-  progress[category].attempts += 1;
+  progress[category].attempts++;
   progress[category].last = score;
   progress[category].best = Math.max(progress[category].best, score);
-
   localStorage.setItem("quizProgress", JSON.stringify(progress));
-  // ---- Best Score Progress Bar ----
-  const bestScore = progress[category].best;
-  const percent = Math.round((bestScore / total) * 100);
+
+  const percent = Math.round((progress[category].best / total) * 100);
 
   document.getElementById("best-category").innerText = category;
   document.getElementById("best-percent").innerText = percent;
   document.getElementById("progress-fill").style.width = percent + "%";
   document.getElementById("best-score-box").classList.remove("hidden");
-  // --------------------------------
 
-  resultEl.classList.remove('hidden');
   resultEl.innerHTML = `
     <h3>Quiz Result</h3>
-    <p><strong>Score:</strong> ${score} / ${total}</p>
-    <p><strong>Accuracy:</strong> ${Math.round((score/total)*100)}%</p>
-    <p><strong>Attempts:</strong> ${progress[category].attempts}</p>
-    <p><strong>Best Score:</strong> ${progress[category].best} / ${total}</p>
+    <p><b>Score:</b> ${score} / ${total}</p>
+    <p><b>Accuracy:</b> ${Math.round((score / total) * 100)}%</p>
+    <p><b>Attempts:</b> ${progress[category].attempts}</p>
   `;
+  resultEl.classList.remove('hidden');
 
   submitBtn.classList.add('hidden');
-  document.getElementById('next-quiz-btn').classList.remove('hidden');
-  document.getElementById('retry-btn').classList.remove('hidden');
-}
+  nextBtn.classList.remove('hidden');
+  retryBtn.classList.remove('hidden');
+});
 
-function nextQuiz() {
+nextBtn.addEventListener('click', () => {
   window.location.href = "/categories";
-}
+});
 
-function retryIncorrect() {
-  if (incorrectCards.length === 0) {
+retryBtn.addEventListener('click', () => {
+  if (!incorrectCards.length) {
     alert("No incorrect questions to retry 🎉");
     return;
   }
 
-  quizCards.forEach(card => card.style.display = 'none');
+  quizCards.forEach(card => (card.style.display = 'none'));
 
   const container = document.getElementById('quiz-container');
 
@@ -176,7 +170,7 @@ function retryIncorrect() {
     });
 
     card.querySelector('.explanation').classList.add('hidden');
-    container.insertBefore(card, document.getElementById('submit-btn'));
+    container.insertBefore(card, submitBtn);
   });
 
   incorrectCards = [];
@@ -185,12 +179,11 @@ function retryIncorrect() {
   completed = false;
 
   submitBtn.classList.add('hidden');
-  document.getElementById('retry-btn').classList.add('hidden');
+  retryBtn.classList.add('hidden');
+  nextBtn.classList.add('hidden');
   resultEl.classList.add('hidden');
-}
+});
 </script>
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-  </div>
-</div>
 
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 {% endblock %}
