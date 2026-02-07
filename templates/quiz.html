@@ -1,21 +1,17 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="quiz-page">
   <h1 class="page-title">Quiz</h1>
 
   <div id="quiz-container">
-
     <p id="progress"></p>
 
-    {% for q in questions %}
-    {% set qid = loop.index %}
+    {% for q in questions %} {% set qid = loop.index %}
     <div class="quiz-card" data-answer="{{ q.answer }}">
       <p class="question">{{ qid }}. {{ q.question }}</p>
 
       {% for opt in q.options %}
       <label class="option">
-        <input type="radio" name="q{{ qid }}" value="{{ opt }}">
+        <input type="radio" name="q{{ qid }}" value="{{ opt }}" />
         {{ opt }}
       </label>
       {% endfor %}
@@ -26,9 +22,15 @@
 
     <!-- Actions -->
     <div class="quiz-actions">
-      <button id="submit-btn" class="btn hidden" type="button">Submit Quiz</button>
-      <button id="next-quiz-btn" class="btn hidden" type="button">New Quiz</button>
-      <button id="retry-btn" class="btn hidden" type="button">Retry Incorrect</button>
+      <button id="submit-btn" class="btn hidden" type="button">
+        Submit Quiz
+      </button>
+      <button id="next-quiz-btn" class="btn hidden" type="button">
+        New Quiz
+      </button>
+      <button id="retry-btn" class="btn hidden" type="button">
+        Retry Incorrect
+      </button>
     </div>
 
     <!-- Result -->
@@ -44,145 +46,145 @@
         <div id="progress-fill"></div>
       </div>
     </div>
-
   </div>
 </div>
 
 <!-- Quiz Page Script -->
 <script>
-let currentIndex = 0;
-let score = 0;
-let completed = false;
-let incorrectCards = [];
+  let currentIndex = 0;
+  let score = 0;
+  let completed = false;
+  let incorrectCards = [];
 
-const quizCards = document.querySelectorAll('.quiz-card');
-const total = quizCards.length;
+  const quizCards = document.querySelectorAll(".quiz-card");
+  const total = quizCards.length;
 
-const submitBtn = document.getElementById('submit-btn');
-const nextBtn = document.getElementById('next-quiz-btn');
-const retryBtn = document.getElementById('retry-btn');
-const resultEl = document.getElementById('result');
+  const submitBtn = document.getElementById("submit-btn");
+  const nextBtn = document.getElementById("next-quiz-btn");
+  const retryBtn = document.getElementById("retry-btn");
+  const resultEl = document.getElementById("result");
 
-const category = "{{ category|default('General') }}";
+  const category = "{{ category|default('General') }}";
 
-quizCards.forEach((card, index) => {
-  card.style.display = index === 0 ? 'block' : 'none';
+  quizCards.forEach((card, index) => {
+    card.style.display = index === 0 ? "block" : "none";
 
-  card.querySelectorAll('input').forEach(opt => {
-    opt.addEventListener('change', () => {
-      nextQuestion(opt.value, card.dataset.answer);
+    card.querySelectorAll("input").forEach((opt) => {
+      opt.addEventListener("change", () => {
+        nextQuestion(opt.value, card.dataset.answer);
+      });
     });
   });
-});
 
-function nextQuestion(selected, correct) {
-  const currentCard = quizCards[currentIndex];
-  if (!currentCard) return;
+  function nextQuestion(selected, correct) {
+    const currentCard = quizCards[currentIndex];
+    if (!currentCard) return;
 
-  const options = currentCard.querySelectorAll('label.option');
+    const options = currentCard.querySelectorAll("label.option");
 
-  options.forEach(opt => {
-    const input = opt.querySelector('input');
-    input.disabled = true;
-    opt.classList.add('disabled');
+    options.forEach((opt) => {
+      const input = opt.querySelector("input");
+      input.disabled = true;
+      opt.classList.add("disabled");
 
-    if (input.value === correct) opt.classList.add('correct');
-    if (input.value === selected && selected !== correct) opt.classList.add('wrong');
-  });
+      if (input.value === correct) opt.classList.add("correct");
+      if (input.value === selected && selected !== correct)
+        opt.classList.add("wrong");
+    });
 
-  if (selected === correct) {
-    score++;
-  } else {
-    incorrectCards.push(currentCard.cloneNode(true));
-  }
-
-  currentCard.querySelector('.explanation').classList.remove('hidden');
-
-  setTimeout(() => {
-    currentCard.style.display = 'none';
-    currentIndex++;
-
-    if (currentIndex < quizCards.length) {
-      quizCards[currentIndex].style.display = 'block';
+    if (selected === correct) {
+      score++;
     } else {
-      completed = true;
-      submitBtn.classList.remove('hidden');
+      incorrectCards.push(currentCard.cloneNode(true));
     }
-  }, 700);
-}
 
-submitBtn.addEventListener('click', () => {
-  if (!completed) return;
+    currentCard.querySelector(".explanation").classList.remove("hidden");
 
-  const progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
+    setTimeout(() => {
+      currentCard.style.display = "none";
+      currentIndex++;
 
-  if (!progress[category]) {
-    progress[category] = { attempts: 0, best: 0, last: 0 };
+      if (currentIndex < quizCards.length) {
+        quizCards[currentIndex].style.display = "block";
+      } else {
+        completed = true;
+        submitBtn.classList.remove("hidden");
+      }
+    }, 700);
   }
 
-  progress[category].attempts++;
-  progress[category].last = score;
-  progress[category].best = Math.max(progress[category].best, score);
-  localStorage.setItem("quizProgress", JSON.stringify(progress));
+  submitBtn.addEventListener("click", () => {
+    if (!completed) return;
 
-  const percent = Math.round((progress[category].best / total) * 100);
+    const progress = JSON.parse(localStorage.getItem("quizProgress")) || {};
 
-  document.getElementById("best-category").innerText = category;
-  document.getElementById("best-percent").innerText = percent;
-  document.getElementById("progress-fill").style.width = percent + "%";
-  document.getElementById("best-score-box").classList.remove("hidden");
+    if (!progress[category]) {
+      progress[category] = { attempts: 0, best: 0, last: 0 };
+    }
 
-  resultEl.innerHTML = `
+    progress[category].attempts++;
+    progress[category].last = score;
+    progress[category].best = Math.max(progress[category].best, score);
+    localStorage.setItem("quizProgress", JSON.stringify(progress));
+
+    const percent = Math.round((progress[category].best / total) * 100);
+
+    document.getElementById("best-category").innerText = category;
+    document.getElementById("best-percent").innerText = percent;
+    document.getElementById("progress-fill").style.width = percent + "%";
+    document.getElementById("best-score-box").classList.remove("hidden");
+
+    resultEl.innerHTML = `
     <h3>Quiz Result</h3>
     <p><b>Score:</b> ${score} / ${total}</p>
     <p><b>Accuracy:</b> ${Math.round((score / total) * 100)}%</p>
     <p><b>Attempts:</b> ${progress[category].attempts}</p>
   `;
-  resultEl.classList.remove('hidden');
+    resultEl.classList.remove("hidden");
 
-  submitBtn.classList.add('hidden');
-  nextBtn.classList.remove('hidden');
-  retryBtn.classList.remove('hidden');
-});
-
-nextBtn.addEventListener('click', () => {
-  window.location.href = "/categories";
-});
-
-retryBtn.addEventListener('click', () => {
-  if (!incorrectCards.length) {
-    alert("No incorrect questions to retry 🎉");
-    return;
-  }
-
-  quizCards.forEach(card => (card.style.display = 'none'));
-
-  const container = document.getElementById('quiz-container');
-
-  incorrectCards.forEach(card => {
-    card.querySelectorAll('input').forEach(i => {
-      i.checked = false;
-      i.disabled = false;
-    });
-
-    card.querySelectorAll('.option').forEach(opt => {
-      opt.classList.remove('correct', 'wrong', 'disabled');
-    });
-
-    card.querySelector('.explanation').classList.add('hidden');
-    container.insertBefore(card, submitBtn);
+    submitBtn.classList.add("hidden");
+    nextBtn.classList.remove("hidden");
+    retryBtn.classList.remove("hidden");
   });
 
-  incorrectCards = [];
-  currentIndex = 0;
-  score = 0;
-  completed = false;
+  nextBtn.addEventListener("click", () => {
+    window.location.href = "/categories";
+  });
 
-  submitBtn.classList.add('hidden');
-  retryBtn.classList.add('hidden');
-  nextBtn.classList.add('hidden');
-  resultEl.classList.add('hidden');
-});
+  retryBtn.addEventListener("click", () => {
+    if (!incorrectCards.length) {
+      alert("No incorrect questions to retry 🎉");
+      return;
+    }
+
+    quizCards.forEach((card) => (card.style.display = "none"));
+
+    const container = document.getElementById("quiz-container");
+
+    incorrectCards.forEach((card) => {
+      card.querySelectorAll("input").forEach((i) => {
+        i.checked = false;
+        i.disabled = false;
+      });
+
+      card.querySelectorAll(".option").forEach((opt) => {
+        opt.classList.remove("correct", "wrong", "disabled");
+      });
+
+      card.querySelector(".explanation").classList.add("hidden");
+      container.insertBefore(card, submitBtn);
+    });
+
+    incorrectCards = [];
+    currentIndex = 0;
+    score = 0;
+    completed = false;
+
+    submitBtn.classList.add("hidden");
+    retryBtn.classList.add("hidden");
+    nextBtn.classList.add("hidden");
+    resultEl.classList.add("hidden");
+  });
 </script>
 
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>

@@ -114,7 +114,20 @@ function displayLastScore() {
 }
 
 document.addEventListener("DOMContentLoaded", displayLastScore);
+function animateCount(el, target, duration = 800) {
+  if (!el) return;
+  let start = 0;
+  const startTime = performance.now();
 
+  function update(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const value = Math.round(start + progress * (target - start));
+    el.innerText = value + "%";
+    if (progress < 1) requestAnimationFrame(update);
+  }
+
+  requestAnimationFrame(update);
+}
 /* =========================
    RETRY INCORRECT QUESTIONS
    ========================= */
@@ -197,6 +210,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let totalPercent = 0;
     let totalBest = 0;
 
+    // --- BADGE LOGIC: calculate top and weak category ---
+    const scores = filtered.map(cat => {
+      const best = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
+      const total = 5;
+      return {
+        cat,
+        percent: Math.round((best / total) * 100)
+      };
+    });
+    const topCategory = scores.reduce((a, b) => (b.percent > a.percent ? b : a), scores[0] || {cat: null, percent: 0});
+    const weakCategory = scores.reduce((a, b) => (b.percent < a.percent ? b : a), scores[0] || {cat: null, percent: 0});
+    // ----------------------------------------------------
+
     filtered.forEach(cat => {
       const best = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
       const total = 5;
@@ -207,14 +233,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const card = document.createElement("div");
       card.className = "dashboard-card";
+      // --- BADGE UI ---
+      const badge =
+        cat === topCategory.cat
+          ? '<span class="dashboard-badge badge-top">🏆 Top Category</span>'
+          : cat === weakCategory.cat
+          ? '<span class="dashboard-badge badge-weak">⚠ Needs Practice</span>'
+          : '';
       card.innerHTML = `
+        ${badge}
         <h3 class="dashboard-category">${cat}</h3>
-        <div class="dashboard-text-stats">
-          <p><b>Best Score:</b> ${best} / ${total}</p>
-          <p><b>Accuracy:</b> ${percent}%</p>
+        <div class="dashboard-progress">
+          <div class="dashboard-progress-fill" style="width:${percent}%"></div>
+        </div>
+        <div class="dashboard-metrics">
+          <span>Best: ${best}/${total}</span>
+          <span class="category-animated-percent" data-percent="${percent}">0%</span>
         </div>
       `;
       dashboard.appendChild(card);
+
+      const percentEl = card.querySelector(".category-animated-percent");
+      animateCount(percentEl, percent);
 
       if (categoryBox) {
         const row = document.createElement("div");
@@ -222,9 +262,12 @@ document.addEventListener("DOMContentLoaded", () => {
         row.innerHTML = `
           <span class="category-name">${cat}</span>
           <span class="category-score">${best}/${total}</span>
-          <span class="category-percent">${percent}%</span>
+          <span class="category-percent" data-percent="${percent}">0%</span>
         `;
         categoryBox.appendChild(row);
+
+        const rowPercent = row.querySelector(".category-percent");
+        animateCount(rowPercent, percent);
       }
     });
 
@@ -241,8 +284,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (statCategoriesEl) statCategoriesEl.innerText = filtered.length;
     if (statBestScoreEl) statBestScoreEl.innerText = totalBest;
     if (statAccuracyEl) {
-      statAccuracyEl.innerText =
-        Math.min(100, Math.round((totalBest / (filtered.length * 5)) * 100)) + "%";
+      const acc = Math.min(
+        100,
+        Math.round((totalBest / (filtered.length * 5)) * 100)
+      );
+      animateCount(statAccuracyEl, acc);
     }
   }
 

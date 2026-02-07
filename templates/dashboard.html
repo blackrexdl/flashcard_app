@@ -1,77 +1,68 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="dashboard-page">
-  <main class="dashboard-container">
+<div class="dashboard-v2">
 
-    <!-- Header -->
-    <header class="dashboard-header">
-      <div class="dashboard-header-top">
-        <h1>Your Progress Dashboard</h1>
+  <!-- HERO SUMMARY -->
+  <section class="dashboard-hero">
+    <h1>Your Learning Progress</h1>
+    <p class="hero-subtitle">A clear view of how you’re improving over time</p>
 
-        <div class="dashboard-header-actions">
-          <button id="reset-progress-btn" class="reset-progress-btn">
-            Reset Progress
-          </button>
-        </div>
+    <div class="hero-metrics">
+      <div class="hero-metric">
+        <span class="metric-label">Categories</span>
+        <span class="metric-value" id="stat-categories">0</span>
       </div>
 
-      <p class="dashboard-subtitle">
-        Track your best performance across all categories
-      </p>
-
-      <div class="dashboard-filter">
-        <label for="category-filter">Filter by category:</label>
-        <select id="category-filter">
-          <option value="all">All Categories</option>
-        </select>
-      </div>
-    </header>
-
-    <!-- Stats -->
-    <section class="dashboard-charts">
-
-      <div class="stats-panel">
-        <h3 class="stats-title">Performance Summary</h3>
-
-        <div class="stats-list">
-          <div class="stat-item">
-            <span class="stat-label">Categories Attempted</span>
-            <span class="stat-value" id="stat-categories">0</span>
-          </div>
-
-          <div class="stat-item">
-            <span class="stat-label">Total Best Score</span>
-            <span class="stat-value" id="stat-best-score">0</span>
-          </div>
-
-          <div class="stat-item">
-            <span class="stat-label">Overall Accuracy</span>
-            <span class="stat-value" id="stat-accuracy">0%</span>
-          </div>
-        </div>
+      <div class="hero-metric">
+        <span class="metric-label">Best Score</span>
+        <span class="metric-value" id="stat-best-score">0</span>
       </div>
 
-      <div class="stats-panel">
-        <h3 class="stats-title">Category Performance</h3>
-
-        <div id="category-performance" class="category-performance">
-          <!-- JS injects category stats -->
-        </div>
+      <div class="hero-metric">
+        <span class="metric-label">Accuracy</span>
+        <span class="metric-value" id="stat-accuracy">0%</span>
       </div>
+    </div>
+  </section>
 
-    </section>
+  <!-- ACTION BAR -->
+  <section class="dashboard-actions">
+    <button id="reset-progress-btn" class="danger-btn">
+      Reset All Progress
+    </button>
 
-    <!-- Category cards -->
-    <section id="dashboard-cards" class="dashboard-cards grid-layout">
-      <!-- JS injects cards -->
-    </section>
+    <div class="dashboard-filter">
+      <label for="category-filter">View category:</label>
+      <select id="category-filter">
+        <option value="all">All</option>
+      </select>
+    </div>
+  </section>
 
-    <!-- Empty state -->
-    <section id="no-data" class="no-data hidden">
-      <p>No quiz attempts yet.</p>
-      <a href="/categories" class="start-quiz-btn">Start a Quiz</a>
-    </section>
+  <!-- CATEGORY PERFORMANCE -->
+  <section class="dashboard-performance">
+    <h2>Category Performance</h2>
 
-  </main>
+    <div id="dashboard-cards" class="dashboard-cards-modern">
+      <!-- JS injects animated category cards -->
+    </div>
+  </section>
+
+  <!-- LIST VIEW -->
+  <section class="dashboard-list">
+    <h2>Detailed Breakdown</h2>
+
+    <div id="category-performance" class="category-performance">
+      <!-- JS injects rows -->
+    </div>
+  </section>
+
+  <!-- EMPTY STATE -->
+  <section id="no-data" class="dashboard-empty hidden">
+    <h2>No progress yet</h2>
+    <p>Complete a quiz to start tracking your performance.</p>
+    <a href="/categories" class="primary-btn">Start First Quiz</a>
+  </section>
+
 </div>
 {% endblock %}
