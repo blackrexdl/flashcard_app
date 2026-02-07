@@ -1575,3 +1575,123 @@ input:checked + .slider:before {
 .dashboard-card .badge-weak {
   box-shadow: 0 0 0 2px rgba(239,68,68,0.35);
 }
+/* =========================
+   DASHBOARD STAT CARDS – PRO UI
+   ========================= */
+
+.dashboard-cards-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Base card */
+.dashboard-stat-card {
+  background: linear-gradient(180deg, #ffffff, #f9fafb);
+  border-radius: 16px;
+  padding: 1.6rem 1.5rem;
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition:
+    transform 280ms ease,
+    box-shadow 280ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover polish */
+.dashboard-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* Headings */
+.dashboard-stat-card h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  margin-bottom: 0.6rem;
+}
+
+/* Main metric */
+.dashboard-stat-card .stat-main {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 0.4rem;
+}
+
+/* Sub text */
+.dashboard-stat-card .stat-sub {
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 0.6rem;
+}
+
+/* Insight text */
+.dashboard-stat-card .stat-insight {
+  font-size: 0.85rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* =========================
+   BEST / WEAK CARD EMPHASIS
+   ========================= */
+
+.dashboard-stat-card.best-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(234, 179, 8, 0.18),
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+.dashboard-stat-card.weak-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(239, 68, 68, 0.16),
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+/* Accent bar */
+.dashboard-stat-card.best-card {
+  border-left: 4px solid #facc15;
+}
+
+.dashboard-stat-card.weak-card {
+  border-left: 4px solid #ef4444;
+}
+
+/* =========================
+   ENTRY ANIMATION (CSS ONLY)
+   ========================= */
+
+.dashboard-stat-card {
+  animation: dashboardCardIn 420ms ease both;
+}
+
+@keyframes dashboardCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

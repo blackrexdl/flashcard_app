@@ -1,7 +1,5 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="dashboard-v2">
-
   <!-- HERO SUMMARY -->
   <section class="dashboard-hero">
     <h1>Your Learning Progress</h1>
@@ -39,21 +37,44 @@
     </div>
   </section>
 
-  <!-- CATEGORY PERFORMANCE -->
+  <!-- PERFORMANCE CARDS -->
   <section class="dashboard-performance">
-    <h2>Category Performance</h2>
+    <h2>Performance Overview</h2>
 
     <div id="dashboard-cards" class="dashboard-cards-modern">
-      <!-- JS injects animated category cards -->
-    </div>
-  </section>
+      <!-- BEST CATEGORY CARD -->
+      <div class="dashboard-stat-card best-card">
+        <h3>Best Category</h3>
+        <p class="stat-main" id="best-category-name">—</p>
+        <p class="stat-sub">Score: <span id="best-category-score">0</span>%</p>
+        <p class="stat-insight" id="best-category-insight">
+          Keep pushing your strongest area.
+        </p>
+      </div>
 
-  <!-- LIST VIEW -->
-  <section class="dashboard-list">
-    <h2>Detailed Breakdown</h2>
+      <!-- WEAK CATEGORY CARD -->
+      <div class="dashboard-stat-card weak-card">
+        <h3>Needs Practice</h3>
+        <p class="stat-main" id="weak-category-name">—</p>
+        <p class="stat-sub">Score: <span id="weak-category-score">0</span>%</p>
+        <p class="stat-insight" id="weak-category-insight">
+          Focus more time here.
+        </p>
+      </div>
 
-    <div id="category-performance" class="category-performance">
-      <!-- JS injects rows -->
+      <!-- OVERALL ACCURACY CARD -->
+      <div class="dashboard-stat-card">
+        <h3>Overall Accuracy</h3>
+        <p class="stat-main" id="overall-accuracy-text">0%</p>
+        <p class="stat-insight">Consistency matters more than speed.</p>
+      </div>
+
+      <!-- COMPLETED CATEGORIES CARD -->
+      <div class="dashboard-stat-card">
+        <h3>Categories Completed</h3>
+        <p class="stat-main" id="categories-completed-text">0</p>
+        <p class="stat-insight">More practice leads to mastery.</p>
+      </div>
     </div>
   </section>
 
@@ -63,6 +84,5 @@
     <p>Complete a quiz to start tracking your performance.</p>
     <a href="/categories" class="primary-btn">Start First Quiz</a>
   </section>
-
 </div>
 {% endblock %}

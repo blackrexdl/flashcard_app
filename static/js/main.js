@@ -236,50 +236,46 @@ document.addEventListener("DOMContentLoaded", () => {
 
       totalPercent += percent;
       highestBestScore = Math.max(highestBestScore, best);
-
-      const card = document.createElement("div");
-      card.className = "dashboard-card";
-
-      const badge =
-        cat === topCategory.cat
-          ? '<span class="dashboard-badge badge-top">🏆 Top Category</span>'
-          : cat === weakCategory.cat
-          ? '<span class="dashboard-badge badge-weak">⚠ Needs Practice</span>'
-          : '';
-
-      card.innerHTML = `
-        ${badge}
-        <h3>${cat}</h3>
-        <div class="dashboard-progress-bar">
-          <div class="dashboard-progress-fill" style="width:${percent}%"></div>
-        </div>
-        <div class="dashboard-metrics">
-          <span>Best: ${best}/${total}</span>
-          <span class="category-animated-percent">0%</span>
-        </div>
-      `;
-
-      dashboard.appendChild(card);
-      card.style.opacity = "0";
-      card.style.transform = "translateY(14px)";
-
-      requestAnimationFrame(() => {
-        card.style.transition = "opacity 400ms ease, transform 400ms ease";
-        card.style.opacity = "1";
-        card.style.transform = "translateY(0)";
-      });
-
-      animateCount(card.querySelector(".category-animated-percent"), percent);
     });
 
-    document.getElementById("stat-categories").innerText = filtered.length;
-    document.getElementById("stat-best-score").innerText = highestBestScore;
-    setTimeout(() => {
-      animateCount(
-        document.getElementById("stat-accuracy"),
-        Math.round(totalPercent / filtered.length)
-      );
-    }, 200);
+    /* =========================
+       PROFESSIONAL STAT CARDS
+       ========================= */
+
+    const bestNameEl = document.getElementById("best-category-name");
+    const bestScoreEl = document.getElementById("best-category-score");
+    const weakNameEl = document.getElementById("weak-category-name");
+    const weakScoreEl = document.getElementById("weak-category-score");
+
+    const accuracyTextEl = document.getElementById("overall-accuracy-text");
+    const completedTextEl = document.getElementById("categories-completed-text");
+
+    if (topCategory) {
+      bestNameEl.innerText = topCategory.cat;
+      animateCount(bestScoreEl, topCategory.percent);
+    }
+
+    if (weakCategory) {
+      weakNameEl.innerText = weakCategory.cat;
+      animateCount(weakScoreEl, weakCategory.percent);
+    }
+
+    completedTextEl.innerText = filtered.length;
+
+    const avgAccuracy = Math.round(totalPercent / filtered.length);
+    accuracyTextEl.innerText = "0%";
+    animateCount(accuracyTextEl, avgAccuracy);
+
+    /* Emphasize best card subtly */
+    const bestCard = document.querySelector(".dashboard-stat-card.best-card");
+    if (bestCard) {
+      bestCard.style.transform = "scale(0.96)";
+      bestCard.style.transition = "transform 400ms ease";
+
+      requestAnimationFrame(() => {
+        bestCard.style.transform = "scale(1)";
+      });
+    }
   }
 
   renderDashboard();
