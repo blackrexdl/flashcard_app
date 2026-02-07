@@ -114,20 +114,30 @@ function displayLastScore() {
 }
 
 document.addEventListener("DOMContentLoaded", displayLastScore);
-function animateCount(el, target, duration = 800) {
+
+/* =========================
+   COUNT ANIMATION
+   ========================= */
+function animateCount(el, target, duration = 900) {
   if (!el) return;
   let start = 0;
   const startTime = performance.now();
 
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
   function update(now) {
-    const progress = Math.min((now - startTime) / duration, 1);
+    const rawProgress = Math.min((now - startTime) / duration, 1);
+    const progress = easeOutCubic(rawProgress);
     const value = Math.round(start + progress * (target - start));
     el.innerText = value + "%";
-    if (progress < 1) requestAnimationFrame(update);
+    if (rawProgress < 1) requestAnimationFrame(update);
   }
 
   requestAnimationFrame(update);
 }
+
 /* =========================
    RETRY INCORRECT QUESTIONS
    ========================= */
@@ -208,20 +218,16 @@ document.addEventListener("DOMContentLoaded", () => {
     categoryBox && (categoryBox.innerHTML = "");
 
     let totalPercent = 0;
-    let totalBest = 0;
+    let highestBestScore = 0;
 
-    // --- BADGE LOGIC: calculate top and weak category ---
     const scores = filtered.map(cat => {
       const best = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
       const total = 5;
-      return {
-        cat,
-        percent: Math.round((best / total) * 100)
-      };
+      return { cat, percent: Math.round((best / total) * 100) };
     });
-    const topCategory = scores.reduce((a, b) => (b.percent > a.percent ? b : a), scores[0] || {cat: null, percent: 0});
-    const weakCategory = scores.reduce((a, b) => (b.percent < a.percent ? b : a), scores[0] || {cat: null, percent: 0});
-    // ----------------------------------------------------
+
+    const topCategory = scores.reduce((a, b) => (b.percent > a.percent ? b : a), scores[0]);
+    const weakCategory = scores.reduce((a, b) => (b.percent < a.percent ? b : a), scores[0]);
 
     filtered.forEach(cat => {
       const best = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
@@ -229,67 +235,51 @@ document.addEventListener("DOMContentLoaded", () => {
       const percent = Math.round((best / total) * 100);
 
       totalPercent += percent;
-      totalBest += best;
+      highestBestScore = Math.max(highestBestScore, best);
 
       const card = document.createElement("div");
       card.className = "dashboard-card";
-      // --- BADGE UI ---
+
       const badge =
         cat === topCategory.cat
           ? '<span class="dashboard-badge badge-top">🏆 Top Category</span>'
           : cat === weakCategory.cat
           ? '<span class="dashboard-badge badge-weak">⚠ Needs Practice</span>'
           : '';
+
       card.innerHTML = `
         ${badge}
-        <h3 class="dashboard-category">${cat}</h3>
-        <div class="dashboard-progress">
+        <h3>${cat}</h3>
+        <div class="dashboard-progress-bar">
           <div class="dashboard-progress-fill" style="width:${percent}%"></div>
         </div>
         <div class="dashboard-metrics">
           <span>Best: ${best}/${total}</span>
-          <span class="category-animated-percent" data-percent="${percent}">0%</span>
+          <span class="category-animated-percent">0%</span>
         </div>
       `;
+
       dashboard.appendChild(card);
+      card.style.opacity = "0";
+      card.style.transform = "translateY(14px)";
 
-      const percentEl = card.querySelector(".category-animated-percent");
-      animateCount(percentEl, percent);
+      requestAnimationFrame(() => {
+        card.style.transition = "opacity 400ms ease, transform 400ms ease";
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0)";
+      });
 
-      if (categoryBox) {
-        const row = document.createElement("div");
-        row.className = "category-performance-row";
-        row.innerHTML = `
-          <span class="category-name">${cat}</span>
-          <span class="category-score">${best}/${total}</span>
-          <span class="category-percent" data-percent="${percent}">0%</span>
-        `;
-        categoryBox.appendChild(row);
-
-        const rowPercent = row.querySelector(".category-percent");
-        animateCount(rowPercent, percent);
-      }
+      animateCount(card.querySelector(".category-animated-percent"), percent);
     });
 
-    const overallScoreEl = document.getElementById("overall-score");
-    const statCategoriesEl = document.getElementById("stat-categories");
-    const statBestScoreEl = document.getElementById("stat-best-score");
-    const statAccuracyEl = document.getElementById("stat-accuracy");
-
-    if (overallScoreEl) {
-      overallScoreEl.innerText =
-        Math.round(totalPercent / filtered.length) + "%";
-    }
-
-    if (statCategoriesEl) statCategoriesEl.innerText = filtered.length;
-    if (statBestScoreEl) statBestScoreEl.innerText = totalBest;
-    if (statAccuracyEl) {
-      const acc = Math.min(
-        100,
-        Math.round((totalBest / (filtered.length * 5)) * 100)
+    document.getElementById("stat-categories").innerText = filtered.length;
+    document.getElementById("stat-best-score").innerText = highestBestScore;
+    setTimeout(() => {
+      animateCount(
+        document.getElementById("stat-accuracy"),
+        Math.round(totalPercent / filtered.length)
       );
-      animateCount(statAccuracyEl, acc);
-    }
+    }, 200);
   }
 
   renderDashboard();

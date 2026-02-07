@@ -1526,3 +1526,52 @@ input:checked + .slider:before {
     font-size: 1.6rem;
   }
 }
+/* =========================
+   OPTION B – BEST / WEAK CATEGORY (SAFE CSS)
+   ========================= */
+
+/* Ensure badge placement is consistent */
+.dashboard-card {
+  position: relative;
+}
+
+/* Badge base (already exists, reinforce visibility) */
+.dashboard-card .dashboard-badge {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* Best category highlight */
+.dashboard-card .badge-top {
+  background: linear-gradient(135deg, #facc15, #eab308);
+  color: #1f2937;
+}
+
+.dashboard-card .badge-top + h3,
+.dashboard-card .badge-top ~ h3 {
+  color: #a16207;
+}
+
+/* Weak category highlight */
+.dashboard-card .badge-weak {
+  background: linear-gradient(135deg, #fb7185, #ef4444);
+  color: #ffffff;
+}
+
+.dashboard-card .badge-weak + h3,
+.dashboard-card .badge-weak ~ h3 {
+  color: #991b1b;
+}
+
+/* Card border cues (browser‑safe, no :has) */
+.dashboard-card .badge-top {
+  box-shadow: 0 0 0 2px rgba(234,179,8,0.35);
+}
+
+.dashboard-card .badge-weak {
+  box-shadow: 0 0 0 2px rgba(239,68,68,0.35);
+}
