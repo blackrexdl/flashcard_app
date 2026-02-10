@@ -76,6 +76,18 @@ function renderQuizResult(score, total, category, retryQuestions) {
   const bestScore = Math.max(prevBest, score);
   localStorage.setItem(bestKey, bestScore);
 
+  const attempts = JSON.parse(localStorage.getItem("quizAttempts") || "[]");
+
+  attempts.push({
+    category,
+    score,
+    total,
+    percent: Math.round((score / total) * 100),
+    timestamp: Date.now()
+  });
+
+  localStorage.setItem("quizAttempts", JSON.stringify(attempts));
+
   const percent = Math.round((bestScore / total) * 100);
   const box = document.getElementById("best-score-box");
 
@@ -175,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Object.keys(localStorage).forEach(key => {
       if (
         key.startsWith("bestScore_") ||
-        ["lastQuizScore", "lastQuizTotal", "retryQuestions", "retryQuestionsCount"].includes(key)
+        ["lastQuizScore", "lastQuizTotal", "retryQuestions", "retryQuestionsCount", "quizAttempts"].includes(key)
       ) {
         localStorage.removeItem(key);
       }
@@ -185,97 +197,74 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const noData = document.getElementById("no-data");
-  const filterSelect = document.getElementById("category-filter");
-  const categoryBox = document.getElementById("category-performance");
-
-  const categories = Object.keys(localStorage)
-    .filter(k => k.startsWith("bestScore_"))
-    .map(k => k.replace("bestScore_", ""));
-
-  if (categories.length === 0) {
-    noData?.classList.remove("hidden");
-    return;
-  }
-
-  noData?.classList.add("hidden");
-
-  let filtered = [...categories];
-
-  categories.forEach(cat => {
-    const opt = document.createElement("option");
-    opt.value = cat;
-    opt.innerText = cat;
-    filterSelect?.appendChild(opt);
-  });
-
-  filterSelect?.addEventListener("change", () => {
-    filtered = filterSelect.value === "all" ? [...categories] : [filterSelect.value];
-    renderDashboard();
-  });
 
   function renderDashboard() {
-    dashboard.innerHTML = "";
-    categoryBox && (categoryBox.innerHTML = "");
+    const attempts = JSON.parse(localStorage.getItem("quizAttempts") || "[]");
 
+    if (attempts.length === 0) {
+      noData?.classList.remove("hidden");
+      return;
+    }
+
+    noData?.classList.add("hidden");
+
+    const byCategory = {};
+    attempts.forEach(a => {
+      if (!byCategory[a.category]) {
+        byCategory[a.category] = [];
+      }
+      byCategory[a.category].push(a.percent);
+    });
+
+    const categories = Object.keys(byCategory);
+
+    let bestCategory = null;
+    let weakCategory = null;
     let totalPercent = 0;
-    let highestBestScore = 0;
 
-    const scores = filtered.map(cat => {
-      const best = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
-      const total = 5;
-      return { cat, percent: Math.round((best / total) * 100) };
+    categories.forEach(cat => {
+      const avg =
+        byCategory[cat].reduce((a, b) => a + b, 0) /
+        byCategory[cat].length;
+
+      totalPercent += avg;
+
+      if (!bestCategory || avg > bestCategory.avg) {
+        bestCategory = { cat, avg };
+      }
+
+      if (!weakCategory || avg < weakCategory.avg) {
+        weakCategory = { cat, avg };
+      }
     });
 
-    const topCategory = scores.reduce((a, b) => (b.percent > a.percent ? b : a), scores[0]);
-    const weakCategory = scores.reduce((a, b) => (b.percent < a.percent ? b : a), scores[0]);
+    const avgAccuracy = Math.round(totalPercent / categories.length);
 
-    filtered.forEach(cat => {
-      const best = parseInt(localStorage.getItem(`bestScore_${cat}`)) || 0;
-      const total = 5;
-      const percent = Math.round((best / total) * 100);
+    /* HERO */
+    document.getElementById("stat-categories").innerText = categories.length;
+    document.getElementById("stat-best-score").innerText = Math.round(bestCategory.avg);
+    document.getElementById("stat-accuracy").innerText = avgAccuracy + "%";
 
-      totalPercent += percent;
-      highestBestScore = Math.max(highestBestScore, best);
-    });
+    /* CARDS */
+    document.getElementById("best-category-name").innerText = bestCategory.cat;
+    animateCount(
+      document.getElementById("best-category-score"),
+      Math.round(bestCategory.avg)
+    );
 
-    /* =========================
-       PROFESSIONAL STAT CARDS
-       ========================= */
+    document.getElementById("weak-category-name").innerText = weakCategory.cat;
+    animateCount(
+      document.getElementById("weak-category-score"),
+      Math.round(weakCategory.avg)
+    );
 
-    const bestNameEl = document.getElementById("best-category-name");
-    const bestScoreEl = document.getElementById("best-category-score");
-    const weakNameEl = document.getElementById("weak-category-name");
-    const weakScoreEl = document.getElementById("weak-category-score");
+    document.getElementById("categories-completed-text").innerText =
+      categories.length;
 
-    const accuracyTextEl = document.getElementById("overall-accuracy-text");
-    const completedTextEl = document.getElementById("categories-completed-text");
-
-    if (topCategory) {
-      bestNameEl.innerText = topCategory.cat;
-      animateCount(bestScoreEl, topCategory.percent);
-    }
-
-    if (weakCategory) {
-      weakNameEl.innerText = weakCategory.cat;
-      animateCount(weakScoreEl, weakCategory.percent);
-    }
-
-    completedTextEl.innerText = filtered.length;
-
-    const avgAccuracy = Math.round(totalPercent / filtered.length);
-    accuracyTextEl.innerText = "0%";
-    animateCount(accuracyTextEl, avgAccuracy);
-
-    /* Emphasize best card subtly */
-    const bestCard = document.querySelector(".dashboard-stat-card.best-card");
-    if (bestCard) {
-      bestCard.style.transform = "scale(0.96)";
-      bestCard.style.transition = "transform 400ms ease";
-
-      requestAnimationFrame(() => {
-        bestCard.style.transform = "scale(1)";
-      });
-    }
+    animateCount(
+      document.getElementById("overall-accuracy-text"),
+      avgAccuracy
+    );
   }
 
   renderDashboard();
