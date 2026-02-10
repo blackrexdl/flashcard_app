@@ -1,6 +1,16 @@
 /* =========================
    THEME
    ========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const submitBtn = document.getElementById("submit-quiz-btn");
+  if (submitBtn) {
+    submitBtn.addEventListener("click", (e) => {
+      e.preventDefault(); // ⛔ stops form reload
+      submitQuiz();
+    });
+  }
+});
+
 function toggleTheme() {
   const html = document.documentElement;
   html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
@@ -10,6 +20,7 @@ function toggleTheme() {
    QUIZ LOGIC
    ========================= */
 function submitQuiz() {
+  console.log("submitQuiz fired");
   const quizCards = document.querySelectorAll(".quiz-card");
   let score = 0;
   const retryQuestions = [];
@@ -48,8 +59,6 @@ function submitQuiz() {
     "General";
 
   renderQuizResult(score, total, category, retryQuestions);
-  saveQuizProgress(score, total, category, retryQuestions);
-  displayLastScore();
   toggleRetryButton(retryQuestions.length);
 }
 
@@ -57,26 +66,23 @@ function submitQuiz() {
    QUIZ HELPERS
    ========================= */
 function renderQuizResult(score, total, category, retryQuestions) {
-  const resultBox = document.getElementById("result");
-  if (!resultBox) return;
-
   let message = "Keep practicing 👍";
   if (score === total) message = "Perfect score 💯";
   else if (score < total / 2) message = "Needs improvement 💪";
-
-  resultBox.innerHTML = `
-    <h3>Quiz Result</h3>
-    <p><b>Score:</b> ${score} / ${total}</p>
-    <p>${message}</p>
-  `;
-  resultBox.classList.remove("hidden");
 
   const bestKey = `bestScore_${category}`;
   const prevBest = parseInt(localStorage.getItem(bestKey) || "0", 10);
   const bestScore = Math.max(prevBest, score);
   localStorage.setItem(bestKey, bestScore);
 
-  const attempts = JSON.parse(localStorage.getItem("quizAttempts") || "[]");
+  console.log("Saving quiz attempt:", { category, score, total });
+
+  let attempts = [];
+  try {
+    attempts = JSON.parse(localStorage.getItem("quizAttempts")) || [];
+  } catch (e) {
+    attempts = [];
+  }
 
   attempts.push({
     category,
@@ -88,22 +94,17 @@ function renderQuizResult(score, total, category, retryQuestions) {
 
   localStorage.setItem("quizAttempts", JSON.stringify(attempts));
 
-  const percent = Math.round((bestScore / total) * 100);
-  const box = document.getElementById("best-score-box");
+  const resultBox = document.getElementById("result");
+  if (!resultBox) return;
 
-  if (box) {
-    document.getElementById("best-category").innerText = category;
-    document.getElementById("best-percent").innerText = percent;
-    document.getElementById("progress-fill").style.width = percent + "%";
-    box.classList.remove("hidden");
-  }
-}
+  console.log("quizAttempts now:", localStorage.getItem("quizAttempts"));
 
-function saveQuizProgress(score, total, category, retryQuestions) {
-  localStorage.setItem("lastQuizScore", score);
-  localStorage.setItem("lastQuizTotal", total);
-  localStorage.setItem("retryQuestions", JSON.stringify(retryQuestions));
-  localStorage.setItem("retryQuestionsCount", retryQuestions.length);
+  resultBox.innerHTML = `
+    <h3>Quiz Result</h3>
+    <p><b>Score:</b> ${score} / ${total}</p>
+    <p>${message}</p>
+  `;
+  resultBox.classList.remove("hidden");
 }
 
 function toggleRetryButton(count) {
@@ -111,21 +112,6 @@ function toggleRetryButton(count) {
   if (!retryBtn) return;
   retryBtn.style.display = count > 0 ? "inline-block" : "none";
 }
-
-/* =========================
-   LAST SCORE
-   ========================= */
-function displayLastScore() {
-  const el = document.getElementById("last-score");
-  const score = localStorage.getItem("lastQuizScore");
-  const total = localStorage.getItem("lastQuizTotal");
-
-  if (el && score !== null && total !== null) {
-    el.innerText = `Previous score: ${score} / ${total}`;
-  }
-}
-
-document.addEventListener("DOMContentLoaded", displayLastScore);
 
 /* =========================
    COUNT ANIMATION
@@ -153,25 +139,31 @@ function animateCount(el, target, duration = 900) {
 /* =========================
    RETRY INCORRECT QUESTIONS
    ========================= */
-document.getElementById("retry-btn")?.addEventListener("click", () => {
-  const retryIds = JSON.parse(localStorage.getItem("retryQuestions")) || [];
-  if (retryIds.length === 0) return alert("No incorrect questions to retry!");
+const retryBtnEl = document.getElementById("retry-btn");
+if (retryBtnEl) {
+  retryBtnEl.addEventListener("click", () => {
+    const retryIds = JSON.parse(localStorage.getItem("retryQuestions")) || [];
+    if (retryIds.length === 0) return alert("No incorrect questions to retry!");
 
-  document.querySelectorAll(".quiz-card").forEach(card => {
-    card.classList.remove("disabled");
-    card.querySelectorAll(".option").forEach(label => {
-      label.classList.remove("correct", "wrong");
-      label.querySelector("input")?.checked = false;
+    document.querySelectorAll(".quiz-card").forEach(card => {
+      card.classList.remove("disabled");
+      card.querySelectorAll(".option").forEach(label => {
+        label.classList.remove("correct", "wrong");
+        const input = label.querySelector("input");
+        if (input) input.checked = false;
+      });
+      const explanation = card.querySelector(".explanation");
+      if (explanation) explanation.classList.add("hidden");
+
+      const id = card.dataset.questionId || card.id || "";
+      card.style.display = retryIds.includes(id) ? "block" : "none";
     });
-    card.querySelector(".explanation")?.classList.add("hidden");
 
-    const id = card.dataset.questionId || card.id || "";
-    card.style.display = retryIds.includes(id) ? "block" : "none";
+    const result = document.getElementById("result");
+    if (result) result.classList.add("hidden");
+    retryBtnEl.style.display = "none";
   });
-
-  document.getElementById("result")?.classList.add("hidden");
-  document.getElementById("retry-btn").style.display = "none";
-});
+}
 
 /* =========================
    DASHBOARD LOGIC
@@ -181,20 +173,22 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("Dashboard attempts:", attempts);
 
   const resetBtn = document.getElementById("reset-progress-btn");
-  resetBtn?.addEventListener("click", () => {
-    if (!confirm("Are you sure you want to reset all progress?")) return;
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      if (!confirm("Are you sure you want to reset all progress?")) return;
 
-    Object.keys(localStorage).forEach(key => {
-      if (
-        key.startsWith("bestScore_") ||
-        ["lastQuizScore", "lastQuizTotal", "retryQuestions", "retryQuestionsCount", "quizAttempts"].includes(key)
-      ) {
-        localStorage.removeItem(key);
-      }
+      Object.keys(localStorage).forEach(key => {
+        if (
+          key.startsWith("bestScore_") ||
+          ["lastQuizScore", "lastQuizTotal", "retryQuestions", "retryQuestionsCount", "quizAttempts"].includes(key)
+        ) {
+          localStorage.removeItem(key);
+        }
+      });
+
+      location.reload();
     });
-
-    location.reload();
-  });
+  }
 
   const noData = document.getElementById("no-data");
 
@@ -203,11 +197,11 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Dashboard attempts:", attempts);
 
     if (attempts.length === 0) {
-      noData?.classList.remove("hidden");
+      if (noData) noData.classList.remove("hidden");
       return;
     }
 
-    noData?.classList.add("hidden");
+    if (noData) noData.classList.add("hidden");
 
     const byCategory = {};
     attempts.forEach(a => {
@@ -242,9 +236,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const avgAccuracy = Math.round(totalPercent / categories.length);
 
     /* HERO */
-    document.getElementById("stat-categories").innerText = categories.length;
-    document.getElementById("stat-best-score").innerText = Math.round(bestCategory.avg);
-    document.getElementById("stat-accuracy").innerText = avgAccuracy + "%";
+    const statCategories = document.getElementById("stat-categories");
+    const statBest = document.getElementById("stat-best-score");
+    const statAccuracy = document.getElementById("stat-accuracy");
+
+    if (statCategories) statCategories.innerText = categories.length;
+    if (statBest) statBest.innerText = Math.round(bestCategory.avg);
+    if (statAccuracy) statAccuracy.innerText = avgAccuracy + "%";
 
     /* CARDS */
     document.getElementById("best-category-name").innerText = bestCategory.cat;
