@@ -177,8 +177,8 @@ document.getElementById("retry-btn")?.addEventListener("click", () => {
    DASHBOARD LOGIC
    ========================= */
 document.addEventListener("DOMContentLoaded", () => {
-  const dashboard = document.getElementById("dashboard-cards");
-  if (!dashboard) return;
+  const attempts = JSON.parse(localStorage.getItem("quizAttempts") || "[]");
+  console.log("Dashboard attempts:", attempts);
 
   const resetBtn = document.getElementById("reset-progress-btn");
   resetBtn?.addEventListener("click", () => {
@@ -200,6 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderDashboard() {
     const attempts = JSON.parse(localStorage.getItem("quizAttempts") || "[]");
+    console.log("Dashboard attempts:", attempts);
 
     if (attempts.length === 0) {
       noData?.classList.remove("hidden");
