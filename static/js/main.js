@@ -1,16 +1,6 @@
 /* =========================
    THEME
    ========================= */
-document.addEventListener("DOMContentLoaded", () => {
-  const submitBtn = document.getElementById("submit-quiz-btn");
-  if (submitBtn) {
-    submitBtn.addEventListener("click", (e) => {
-      e.preventDefault(); // ⛔ stops form reload
-      submitQuiz();
-    });
-  }
-});
-
 function toggleTheme() {
   const html = document.documentElement;
   html.dataset.theme = html.dataset.theme === "dark" ? "light" : "dark";
@@ -168,7 +158,80 @@ if (retryBtnEl) {
 /* =========================
    DASHBOARD LOGIC
    ========================= */
+function renderDashboard() {
+  const container = document.getElementById("dashboard-cards");
+  if (!container) return;
+
+  const attempts = JSON.parse(localStorage.getItem("quizAttempts") || "[]");
+  console.log("Dashboard attempts:", attempts);
+
+  const noData = document.getElementById("no-data");
+
+  if (attempts.length === 0) {
+    if (noData) noData.classList.remove("hidden");
+    return;
+  }
+
+  if (noData) noData.classList.add("hidden");
+
+  const byCategory = {};
+  attempts.forEach(a => {
+    if (!byCategory[a.category]) byCategory[a.category] = [];
+    byCategory[a.category].push(a.percent);
+  });
+
+  const categories = Object.keys(byCategory);
+
+  let bestCategory = null;
+  let weakCategory = null;
+  let totalPercent = 0;
+
+  categories.forEach(cat => {
+    const avg =
+      byCategory[cat].reduce((a, b) => a + b, 0) /
+      byCategory[cat].length;
+
+    totalPercent += avg;
+
+    if (!bestCategory || avg > bestCategory.avg) {
+      bestCategory = { cat, avg };
+    }
+
+    if (!weakCategory || avg < weakCategory.avg) {
+      weakCategory = { cat, avg };
+    }
+  });
+
+  const avgAccuracy = Math.round(totalPercent / categories.length);
+
+  const statCategories = document.getElementById("stat-categories");
+  const statBest = document.getElementById("stat-best-score");
+  const statAccuracy = document.getElementById("stat-accuracy");
+
+  if (statCategories) statCategories.innerText = attempts.length;
+  if (statBest) statBest.innerText = Math.round(bestCategory.avg) + "%";
+  if (statAccuracy) statAccuracy.innerText = avgAccuracy + "%";
+
+  const bestName = document.getElementById("best-category-name");
+  const bestScore = document.getElementById("best-category-score");
+  const weakName = document.getElementById("weak-category-name");
+  const weakScore = document.getElementById("weak-category-score");
+  const completedText = document.getElementById("categories-completed-text");
+  const overallText = document.getElementById("overall-accuracy-text");
+
+  if (bestName) bestName.innerText = bestCategory.cat;
+  if (bestScore) animateCount(bestScore, Math.round(bestCategory.avg));
+
+  if (weakName) weakName.innerText = weakCategory.cat;
+  if (weakScore) animateCount(weakScore, Math.round(weakCategory.avg));
+
+  if (completedText) completedText.innerText = attempts.length;
+  if (overallText) animateCount(overallText, avgAccuracy);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  renderDashboard();
+
   const attempts = JSON.parse(localStorage.getItem("quizAttempts") || "[]");
   console.log("Dashboard attempts:", attempts);
 
@@ -189,82 +252,4 @@ document.addEventListener("DOMContentLoaded", () => {
       location.reload();
     });
   }
-
-  const noData = document.getElementById("no-data");
-
-  function renderDashboard() {
-    const attempts = JSON.parse(localStorage.getItem("quizAttempts") || "[]");
-    console.log("Dashboard attempts:", attempts);
-
-    if (attempts.length === 0) {
-      if (noData) noData.classList.remove("hidden");
-      return;
-    }
-
-    if (noData) noData.classList.add("hidden");
-
-    const byCategory = {};
-    attempts.forEach(a => {
-      if (!byCategory[a.category]) {
-        byCategory[a.category] = [];
-      }
-      byCategory[a.category].push(a.percent);
-    });
-
-    const categories = Object.keys(byCategory);
-
-    let bestCategory = null;
-    let weakCategory = null;
-    let totalPercent = 0;
-
-    categories.forEach(cat => {
-      const avg =
-        byCategory[cat].reduce((a, b) => a + b, 0) /
-        byCategory[cat].length;
-
-      totalPercent += avg;
-
-      if (!bestCategory || avg > bestCategory.avg) {
-        bestCategory = { cat, avg };
-      }
-
-      if (!weakCategory || avg < weakCategory.avg) {
-        weakCategory = { cat, avg };
-      }
-    });
-
-    const avgAccuracy = Math.round(totalPercent / categories.length);
-
-    /* HERO */
-    const statCategories = document.getElementById("stat-categories");
-    const statBest = document.getElementById("stat-best-score");
-    const statAccuracy = document.getElementById("stat-accuracy");
-
-    if (statCategories) statCategories.innerText = categories.length;
-    if (statBest) statBest.innerText = Math.round(bestCategory.avg);
-    if (statAccuracy) statAccuracy.innerText = avgAccuracy + "%";
-
-    /* CARDS */
-    document.getElementById("best-category-name").innerText = bestCategory.cat;
-    animateCount(
-      document.getElementById("best-category-score"),
-      Math.round(bestCategory.avg)
-    );
-
-    document.getElementById("weak-category-name").innerText = weakCategory.cat;
-    animateCount(
-      document.getElementById("weak-category-score"),
-      Math.round(weakCategory.avg)
-    );
-
-    document.getElementById("categories-completed-text").innerText =
-      categories.length;
-
-    animateCount(
-      document.getElementById("overall-accuracy-text"),
-      avgAccuracy
-    );
-  }
-
-  renderDashboard();
 });
