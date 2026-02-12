@@ -4,11 +4,16 @@ A Flask-based web application for studying with flashcards and taking quizzes ac
 
 ## Features
 
-- 📇 Flashcards for studying
-- 📝 Multiple choice quizzes
-- 📂 Categories for organized learning
-- 📊 Results dashboard
+- 📇 Interactive flashcards for active learning
+- 📝 Multiple-choice quizzes with instant feedback
+- 📂 Category-based quiz organization
+- 📊 Dynamic performance dashboard with analytics
+- 🏆 Best & weak category tracking
+- 📈 Overall accuracy calculation
+- 🔁 Retry incorrect questions feature
+- 🌗 Light/Dark mode toggle
 - 🔀 Mixed quizzes from multiple categories
+- 💾 LocalStorage-based progress persistence
 
 ## Project Structure
 
@@ -137,6 +142,17 @@ If you need to add new dependencies:
 pip install <package-name>
 pip freeze > requirements.txt
 ```
+
+## 🚀 Future Enhancements
+
+- 🔐 User authentication & login system
+- 🗄 Database integration (PostgreSQL / SQLite)
+- 📊 Advanced analytics with charts
+- 📜 Detailed quiz history timeline
+- 🧠 Adaptive difficulty based on performance
+- 📱 Improved mobile responsiveness
+- ☁️ Deployment (Render / Railway / AWS)
+- 🛠 Admin panel for managing questions & flashcards
 
 ## License
 
